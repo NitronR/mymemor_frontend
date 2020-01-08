@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './component/NavBar/NavBar'
 import LandingPage from './component/LandingPage';
 import LoginPage from './component/LoginPage';
