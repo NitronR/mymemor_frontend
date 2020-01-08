@@ -12,13 +12,19 @@ function NavBar() {
       <Navbar.Collapse id="main-nav">
         <Nav className="ml-auto">
           <Nav.Item>
-            <Nav.Link href="/login">Login</Nav.Link>
+            <Nav.Link>
+              <Link to="/login">Login</Link>
+            </Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link href="/register">Register</Nav.Link>
+            <Nav.Link>
+              <Link to="/register">Register</Link>
+            </Nav.Link>
           </Nav.Item>
           <Nav.Item>
-              <Link to="about">About</Link>
+            <Nav.Link>
+              <Link to="/about">About</Link>
+            </Nav.Link>
           </Nav.Item>
         </Nav>
       </Navbar.Collapse>
