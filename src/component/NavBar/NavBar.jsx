@@ -7,7 +7,9 @@ import { Link } from "react-router-dom";
 function NavBar() {
   return (
     <Navbar bg="light" expand="lg">
-      <Navbar.Brand href="#home">MyMemor</Navbar.Brand>
+      <Navbar.Brand href="#">
+        <Link to="/">MyMemor</Link>
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="main-nav" />
       <Navbar.Collapse id="main-nav">
         <Nav className="ml-auto">
