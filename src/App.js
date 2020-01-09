@@ -24,8 +24,8 @@ function App() {
             <Route path="/login" component={LoginPage}></Route>
             <Route path="/register" component={RegisterPage}></Route>
             <Route path="/about" component={AboutPage}></Route>
-            <Route path="/add" component={AddMemoryPage}></Route>
-            <Route path="/myPeople" component={MyPeoplePage}></Route>
+            <Route path="/add-memory" component={AddMemoryPage}></Route>
+            <Route path="/my-people" component={MyPeoplePage}></Route>
             <Route path="/search" component={SearchPage}></Route>
             <Route path="" component={PageNotFound}></Route>
           </Switch>
