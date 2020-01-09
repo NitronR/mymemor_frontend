@@ -4,6 +4,7 @@ import NavBar from './component/NavBar/NavBar'
 import LandingPage from './component/LandingPage';
 import LoginPage from './component/LoginPage';
 import RegisterPage from './component/RegisterPage';
+import MemolinePage from './component/MemolinePage';
 import AboutPage from './component/AboutPage';
 import AddMemoryPage from './component/AddMemoryPage';
 import MyPeoplePage from './component/MyPeoplePage';
@@ -23,6 +24,7 @@ function App() {
             <Route path="/" exact component={LandingPage}></Route>
             <Route path="/login" component={LoginPage}></Route>
             <Route path="/register" component={RegisterPage}></Route>
+            <Route path="/memoline" component={MemolinePage}></Route>
             <Route path="/about" component={AboutPage}></Route>
             <Route path="/add-memory" component={AddMemoryPage}></Route>
             <Route path="/my-people" component={MyPeoplePage}></Route>

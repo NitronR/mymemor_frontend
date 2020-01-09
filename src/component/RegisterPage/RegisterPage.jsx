@@ -28,9 +28,124 @@ class RegisterPage extends React.Component {
     this.handleInput = this.handleInput.bind(this);
   }
 
-  handleInput(e) {
-    let name = e.target.name;
-    let value = e.target.value;
+  render() {
+    return (
+      <div id="register-boundary">
+        <Card id="register-card">
+          <Card.Title>
+            <h3>Register</h3>
+          </Card.Title>
+          <Card.Body>
+            {/* Register heading */}
+            <Form id="register-form" onSubmit={this.register} className="text-left">
+              {/* Name field */}
+              <Input
+                name="name"
+                label="Full Name"
+                type="text"
+                errors={this.state.errors.name}
+                onChange={this.handleInput}
+                required
+              />
+
+              {/* Username field */}
+              <Input
+                name="username"
+                label="Username"
+                type="text"
+                errors={this.state.errors.username}
+                onChange={this.handleInput}
+                required
+              />
+
+              {/* Email field */}
+              <Input
+                name="email"
+                label="Email"
+                type="email"
+                errors={this.state.errors.email}
+                onChange={this.handleInput}
+                required
+              />
+
+              {/* Password field */}
+              <Input
+                name="password"
+                label="Password"
+                type="password"
+                errors={this.state.errors.password}
+                onChange={this.handleInput}
+                required
+              />
+
+              {/* Confirm Password field */}
+              <Input
+                name="confirm_password"
+                label="Confirm password"
+                type="password"
+                errors={this.state.errors.confirm_password}
+                onChange={this.handleInput}
+                required
+              />
+
+              {/* Personal details heading */}
+              <h6>
+                <u>Personal details (Optional)</u>
+              </h6>
+
+              {/* Hometown field */}
+              <Input
+                name="hometown"
+                label="Hometown"
+                type="text"
+                errors={this.state.errors.hometown}
+                onChange={this.handleInput}
+              />
+
+              {/* Current city field */}
+              <Input
+                name="current_city"
+                label="Current city"
+                type="text"
+                errors={this.state.errors.current_city}
+                onChange={this.handleInput}
+              />
+
+              {/* School field */}
+              <Input
+                name="school"
+                label="School"
+                type="text"
+                errors={this.state.errors.school}
+                onChange={this.handleInput}
+              />
+
+              {/* College field */}
+              <Input
+                name="college"
+                label="College"
+                type="text"
+                errors={this.state.errors.college}
+                onChange={this.handleInput}
+              />
+
+              {/* Submit register */}
+              <Form.Control
+                type="submit"
+                className="btn-primary"
+                value="Register"
+                required
+              />
+            </Form>
+          </Card.Body>
+        </Card>
+      </div>
+    );
+  }
+
+  handleInput(event) {
+    let name = event.target.name;
+    let value = event.target.value;
     let errors = this.state.errors;
 
     errors[name] = [];
@@ -85,137 +200,22 @@ class RegisterPage extends React.Component {
     });
   }
 
-  render() {
-    return (
-      <Card id="register-card">
-        <Card.Body>
-          <Card.Text>
-            {/* Register heading */}
-            <h3>Register</h3>
-            <br />
-
-            <Form id="register-form" onSubmit={this.register}>
-              {/* Name field */}
-              <Input
-                name="name"
-                label="Enter name"
-                type="text"
-                errors={this.state.errors.name}
-                onChange={this.handleInput}
-                required
-              />
-
-              {/* Username field */}
-              <Input
-                name="username"
-                label="Enter username"
-                type="text"
-                errors={this.state.errors.username}
-                onChange={this.handleInput}
-                required
-              />
-
-              {/* Email field */}
-              <Input
-                name="email"
-                label="Enter email"
-                type="email"
-                errors={this.state.errors.email}
-                onChange={this.handleInput}
-                required
-              />
-
-              {/* Password field */}
-              <Input
-                name="password"
-                label="Enter password"
-                type="password"
-                errors={this.state.errors.password}
-                onChange={this.handleInput}
-                required
-              />
-
-              {/* Confirm Password field */}
-              <Input
-                name="confirm_password"
-                label="Confirm password"
-                type="password"
-                errors={this.state.errors.confirm_password}
-                onChange={this.handleInput}
-                required
-              />
-
-              {/* Personal details heading */}
-              <h6>
-                <u>Personal details (Optional)</u>
-              </h6>
-
-              {/* Hometown field */}
-              <Input
-                name="hometown"
-                label="Enter hometown"
-                type="text"
-                errors={this.state.errors.hometown}
-                onChange={this.handleInput}
-              />
-
-              {/* Current city field */}
-              <Input
-                name="current_city"
-                label="Enter current city"
-                type="text"
-                errors={this.state.errors.current_city}
-                onChange={this.handleInput}
-              />
-
-              {/* School field */}
-              <Input
-                name="school"
-                label="Enter school"
-                type="text"
-                errors={this.state.errors.school}
-                onChange={this.handleInput}
-              />
-
-              {/* College field */}
-              <Input
-                name="college"
-                label="Enter college"
-                type="text"
-                errors={this.state.errors.college}
-                onChange={this.handleInput}
-              />
-
-              {/* Submit register */}
-              <Form.Control
-                type="submit"
-                required
-                className="btn-primary"
-                value="Register"
-              />
-            </Form>
-          </Card.Text>
-        </Card.Body>
-      </Card>
-    );
-  }
-
   register = async event => {
     event.preventDefault();
 
     if (!this.state.formInvalid) {
       // send to api service and get response
-      ApiService.register(this.state.form_data).then(res => {
-        let data = res.data;
-        if (data.status) {
-          if (data.status === "success") {
-            // redirect to login
-            // TODO show success
-            this.props.history.push("/login");
-          } else {
-            // show errors
-            this.setState({ errors: data.errors });
-          }
+      // TODO handle promise reject
+      // TODO show loading
+      ApiService.register(this.state.form_data).then(response => {
+        response = response.data;
+        if (response.status === "success") {
+          // redirect to login
+          // TODO show success
+          this.props.history.push("/login");
+        } else if (response.status === "error") {
+          // show errors
+          this.setState({ errors: response.errors });
         } else {
           // TODO something went wrong
         }

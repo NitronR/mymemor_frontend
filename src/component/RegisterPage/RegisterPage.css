@@ -4,12 +4,11 @@
   padding-right: 3rem;
   width: 25rem;
   text-align: center;
-  margin-top: 25rem;
-  margin-bottom: 5rem;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
 }
-#register-form {
-  text-align: left;
-}
-.text-field {
+#register-boundary {
   width: 100%;
+  display: flex;
+  justify-content: center;
 }

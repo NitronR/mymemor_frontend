@@ -18,7 +18,7 @@ class Input extends React.Component {
         {/* for displaying errors */}
         <Form.Control.Feedback type="invalid">
           {this.props.errors &&
-            this.props.errors.map(element => <div>{element}</div>)}
+            this.props.errors.map(error => <div>{error}</div>)}
         </Form.Control.Feedback>
       </FormGroup>
     );

@@ -4,9 +4,13 @@ import "./AboutPage.css";
 
 function AboutPage() {
   return (
-    <Card>
-      <h3>About page</h3>
-    </Card>
+    <div className="boundary-center">
+      <Card style={{ padding: "2rem" }}>
+        <Card.Title>
+          <h3>About page</h3>
+        </Card.Title>
+      </Card>
+    </div>
   );
 }
 
