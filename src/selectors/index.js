@@ -1,0 +1,1 @@
+export const getUserState = store => store.auth.user;

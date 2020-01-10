@@ -5,6 +5,9 @@ import { Form, Alert } from "react-bootstrap";
 import Input from "../Form/Input";
 import ApiService from "../../service/ApiService";
 import { Link } from "react-router-dom";
+import { getUserState } from "../../selectors";
+import { connect } from "react-redux";
+import { loginUser } from "../../actions";
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -25,7 +28,7 @@ class LoginPage extends React.Component {
   render() {
     return (
       <div className="boundary-center">
-        <Card id="login-card">
+        <Card className="main-card">
           <Card.Title>
             {/* Login heading */}
             <h3>Login</h3>
@@ -104,8 +107,16 @@ class LoginPage extends React.Component {
       response = response.data;
 
       if (response.status === "success") {
+        // login user
+        // TODO improve
+        let username = response.username;
+
+        this.props.loginUser({ username: username, authenticated: true });
+
+        // redirect to memoline
         this.props.history.push("/memoline");
       } else if (response.status === "error") {
+        // show error in form
         this.setState({ errors: response.errors });
       } else {
         // TODO something went wrong
@@ -114,4 +125,9 @@ class LoginPage extends React.Component {
   }
 }
 
-export default LoginPage;
+const mapStateToProps = state => {
+  const user = getUserState(state);
+  return { user };
+};
+
+export default connect(mapStateToProps, { loginUser })(LoginPage);

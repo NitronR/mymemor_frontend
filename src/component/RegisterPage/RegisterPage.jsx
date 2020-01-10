@@ -31,7 +31,7 @@ class RegisterPage extends React.Component {
   render() {
     return (
       <div id="register-boundary">
-        <Card id="register-card">
+        <Card className="main-card">
           <Card.Title>
             <h3>Register</h3>
           </Card.Title>

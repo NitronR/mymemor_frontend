@@ -1,4 +1,7 @@
 import React from "react";
+import { connect } from "react-redux";
+import { getUserState } from "../../selectors";
+import { Redirect } from "react-router-dom";
 
 // TODO
 class MemolinePage extends React.Component {
@@ -11,8 +14,20 @@ class MemolinePage extends React.Component {
   }
 
   render() {
-    return <h1>Memoline</h1>;
+    return (
+      <div>
+        {/* Redirect to login if not logged in */}
+        {!this.props.user.authenticated && <Redirect to="/login" />}
+
+        <h1>Memoline</h1>
+      </div>
+    );
   }
 }
 
-export default MemolinePage;
+const mapStateToProps = state => {
+  let user = getUserState(state);
+  return { user };
+};
+
+export default connect(mapStateToProps)(MemolinePage);

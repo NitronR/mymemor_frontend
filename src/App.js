@@ -11,6 +11,7 @@ import MyPeoplePage from './component/MyPeoplePage';
 import SearchPage from './component/SearchPage';
 import PageNotFound from './component/404';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import ProfilePage from './component/ProfilePage/ProfilePage';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/login" component={LoginPage}></Route>
             <Route path="/register" component={RegisterPage}></Route>
             <Route path="/memoline" component={MemolinePage}></Route>
+            <Route path="/profile" component={ProfilePage}></Route>
             <Route path="/about" component={AboutPage}></Route>
             <Route path="/add-memory" component={AddMemoryPage}></Route>
             <Route path="/my-people" component={MyPeoplePage}></Route>
