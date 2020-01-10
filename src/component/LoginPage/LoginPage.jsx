@@ -4,10 +4,10 @@ import "./LoginPage.css";
 import { Form, Alert } from "react-bootstrap";
 import Input from "../Form/Input";
 import ApiService from "../../service/ApiService";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { getUserState } from "../../selectors";
 import { connect } from "react-redux";
-import { loginUser } from "../../actions";
+import { loginUser, setLoading } from "../../actions";
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -28,6 +28,9 @@ class LoginPage extends React.Component {
   render() {
     return (
       <div className="boundary-center">
+        {/* Redirect to memoline if logged in */}
+        {this.props.user.authenticated && <Redirect to="/memoline" />}
+
         <Card className="main-card">
           <Card.Title>
             {/* Login heading */}
@@ -93,17 +96,22 @@ class LoginPage extends React.Component {
     });
   }
 
-  login(event) {
+  login = async event => {
     event.preventDefault();
 
     // clear errors
     this.setState({ errors: {} });
 
     // verify credentials
-    // TODO handle promise reject
-    // TODO show loading
 
-    ApiService.login(this.state.form_data).then(response => {
+    // show loading
+    this.props.setLoading(true);
+
+    try {
+      let response = await ApiService.login(this.state.form_data);
+
+      if (response.status !== 200) throw new Error(response.statusText);
+
       response = response.data;
 
       if (response.status === "success") {
@@ -121,8 +129,13 @@ class LoginPage extends React.Component {
       } else {
         // TODO something went wrong
       }
-    });
-  }
+    } catch (e) {
+      // TODO handle promise reject
+    } finally {
+      // stop loading
+      this.props.setLoading(false);
+    }
+  };
 }
 
 const mapStateToProps = state => {
@@ -130,4 +143,4 @@ const mapStateToProps = state => {
   return { user };
 };
 
-export default connect(mapStateToProps, { loginUser })(LoginPage);
+export default connect(mapStateToProps, { loginUser, setLoading })(LoginPage);

@@ -8,6 +8,9 @@ class ApiService {
     login(userCreds) {
         return axios.post(API_BASE_URL + "/login", userCreds);
     }
+    getProfile(username) {
+        return axios.get(API_BASE_URL + "/profile/" + username);
+    }
 }
 
 export default new ApiService();

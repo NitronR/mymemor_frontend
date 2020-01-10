@@ -5,6 +5,9 @@ import { Form } from "react-bootstrap";
 import Input from "../Form/Input";
 import checkUsername from "../../utils/Validation";
 import ApiService from "../../service/ApiService";
+import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { getUserState } from "../../selectors";
 
 class RegisterPage extends React.Component {
   constructor(props) {
@@ -21,7 +24,6 @@ class RegisterPage extends React.Component {
         school: "",
         college: ""
       },
-      isLoading: false,
       errors: {},
       formInvalid: true
     };
@@ -31,13 +33,20 @@ class RegisterPage extends React.Component {
   render() {
     return (
       <div id="register-boundary">
+        {/* Redirect to memoline if logged in */}
+        {this.props.user.authenticated && <Redirect to="/memoline" />}
+
         <Card className="main-card">
           <Card.Title>
+            {/* Register heading */}
             <h3>Register</h3>
           </Card.Title>
           <Card.Body>
-            {/* Register heading */}
-            <Form id="register-form" onSubmit={this.register} className="text-left">
+            <Form
+              id="register-form"
+              onSubmit={this.register}
+              className="text-left"
+            >
               {/* Name field */}
               <Input
                 name="name"
@@ -224,4 +233,9 @@ class RegisterPage extends React.Component {
   };
 }
 
-export default RegisterPage;
+const mapStateToProps = state => {
+  let user = getUserState(state);
+  return { user };
+};
+
+export default connect(mapStateToProps)(RegisterPage);
