@@ -16,6 +16,7 @@ import LoadingOverlay from 'react-loading-overlay';
 import { connect } from 'react-redux';
 import { isLoading } from './selectors';
 import { setLoading } from './actions'
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 class App extends React.Component {
   constructor(props) {
@@ -30,23 +31,35 @@ class App extends React.Component {
       <div id="App">
         <LoadingOverlay active={this.props.isLoading} spinner text="Loading...">
           <Router>
-            <header>
-              <NavBar></NavBar>
-            </header>
-            <section id='main-container'>
-              <Switch>
-                <Route path="/" exact component={LandingPage}></Route>
-                <Route path="/login" component={LoginPage}></Route>
-                <Route path="/register" component={RegisterPage}></Route>
-                <Route path="/memoline" component={MemolinePage}></Route>
-                <Route path="/profile/:profileUsername" component={ProfilePage}></Route>
-                <Route path="/about" component={AboutPage}></Route>
-                <Route path="/add-memory" component={AddMemoryPage}></Route>
-                <Route path="/my-people" component={MyPeoplePage}></Route>
-                <Route path="/search" component={SearchPage}></Route>
-                <Route path="" component={PageNotFound}></Route>
-              </Switch>
-            </section>
+            <Route render={({ location }) => (
+              <div id="app-container">
+                <header>
+                  <NavBar></NavBar>
+                </header>
+                <section id='main-container'>
+                  <TransitionGroup id="router-transition-group">
+                    <CSSTransition
+                      key={location.key}
+                      classNames="fade"
+                      timeout={300}
+                    >
+                      <Switch location={location}>
+                        <Route path="/" exact component={LandingPage}></Route>
+                        <Route path="/login" component={LoginPage}></Route>
+                        <Route path="/register" component={RegisterPage}></Route>
+                        <Route path="/memoline" component={MemolinePage}></Route>
+                        <Route path="/profile/:profileUsername" component={ProfilePage}></Route>
+                        <Route path="/about" component={AboutPage}></Route>
+                        <Route path="/add-memory" component={AddMemoryPage}></Route>
+                        <Route path="/my-people" component={MyPeoplePage}></Route>
+                        <Route path="/search" component={SearchPage}></Route>
+                        <Route path="" component={PageNotFound}></Route>
+                      </Switch>
+                    </CSSTransition>
+                  </TransitionGroup>
+                </section>
+              </div>
+            )} />
           </Router>
         </LoadingOverlay>
       </div>

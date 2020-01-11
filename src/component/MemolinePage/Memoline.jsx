@@ -15,7 +15,7 @@ class MemolinePage extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="boundary-center">
         {/* Redirect to login if not logged in */}
         {!this.props.user.authenticated && <Redirect to="/login" />}
 
