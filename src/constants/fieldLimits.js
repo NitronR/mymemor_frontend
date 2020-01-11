@@ -1,0 +1,1 @@
+export const MAX_LEN_TOPIC = 50;
