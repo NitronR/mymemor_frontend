@@ -11,6 +11,12 @@ class ApiService {
     getProfile(username) {
         return axios.get(API_BASE_URL + "/profile/" + username);
     }
+    sendBondRequest(username) {
+        return axios.post(API_BASE_URL + "/send_bond_request", { username });
+    }
+    getMemoline() {
+        return axios.get(API_BASE_URL + "/memoline");
+    }
 }
 
 export default new ApiService();

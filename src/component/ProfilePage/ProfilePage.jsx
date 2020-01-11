@@ -7,6 +7,7 @@ import PersonCard from "./PersonCard";
 import PersonDetails from "./PersonDetails";
 import { setLoading } from "../../actions";
 import ApiService from "../../service/ApiService";
+import classNames from "classnames";
 
 class ProfilePage extends React.Component {
   constructor(props) {
@@ -20,7 +21,8 @@ class ProfilePage extends React.Component {
       current_city: "",
       school: "",
       college: "",
-      is_bonded: ""
+      is_bonded: "",
+      is_requested: ""
     };
   }
   async componentDidMount() {
@@ -50,23 +52,26 @@ class ProfilePage extends React.Component {
         {!this.props.user.authenticated && <Redirect to="/login" />}
 
         {/* person card and details container */}
-        {!this.props.isLoading && (
-          <div className="profile-cards">
-            <PersonCard
-              profilePicURL={this.state.profile_pic_url}
-              name={this.state.name}
-              username={this.state.username}
-            />
-            <br />
-            <PersonDetails
-              currentCity={this.state.current_city}
-              hometown={this.state.hometown}
-              school={this.state.school}
-              college={this.state.college}
-              isBonded={this.state.is_bonded}
-            />
-          </div>
-        )}
+
+        <div
+          className={classNames({ "profile-cards": true, "d-none": !isLoading })}
+        >
+          <PersonCard
+            profilePicURL={this.state.profile_pic_url}
+            name={this.state.name}
+            username={this.state.username}
+          />
+          <br />
+          <PersonDetails
+            username={this.state.username}
+            currentCity={this.state.current_city}
+            hometown={this.state.hometown}
+            school={this.state.school}
+            college={this.state.college}
+            isBonded={this.state.is_bonded}
+            isRequested={this.state.is_requested}
+          />
+        </div>
       </div>
     );
   }

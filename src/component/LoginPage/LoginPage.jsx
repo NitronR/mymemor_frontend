@@ -110,7 +110,10 @@ class LoginPage extends React.Component {
     try {
       let response = await ApiService.login(this.state.form_data);
 
-      if (response.status !== 200) throw new Error(response.statusText);
+      // throw if not ok
+      if (response.status !== 200) {
+        throw new Error(response.statusText);
+      }
 
       response = response.data;
 

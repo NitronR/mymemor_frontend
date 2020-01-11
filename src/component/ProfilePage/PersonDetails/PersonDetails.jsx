@@ -2,10 +2,17 @@ import React from "react";
 import { connect } from "react-redux";
 import { setLoading } from "../../../actions";
 import { Card, Button } from "react-bootstrap";
+import ApiService from "../../../service/ApiService";
 
 class PersonDetails extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      isBonded: this.props.isBonded,
+      isRequested: this.props.isRequested
+    };
+
     this.handleBondRequest = this.handleBondRequest.bind(this);
   }
   render() {
@@ -27,12 +34,12 @@ class PersonDetails extends React.Component {
           <DetailsField label="College" value={this.props.college} />
 
           {/* Submit bond request button */}
-          {!this.props.isBonded && (
+          {!(this.state.isBonded || this.state.isRequested) && (
             <div
-              class="d-flex justify-content-center"
+              className="d-flex justify-content-center"
               style={{ marginTop: "1rem" }}
             >
-              <Button variant="primary" onClick={this.handleBondRequest}>
+              <Button className="btn-primary" onClick={this.handleBondRequest}>
                 Send Bond Request
               </Button>
             </div>
@@ -41,9 +48,34 @@ class PersonDetails extends React.Component {
       </Card>
     );
   }
-  handleBondRequest() {
-    // TODO send bond request
-  }
+  handleBondRequest = async event => {
+    event.preventDefault();
+    // fetch data
+    this.props.setLoading(true);
+
+    try {
+      let response = await ApiService.sendBondRequest(this.props.username);
+      // throw if not ok
+      if (response.status !== 200) {
+        throw new Error(response.statusText);
+      }
+
+      response = response.data;
+
+      console.log(response);
+
+      if (response.status === "success") {
+        // set isRequested
+        this.setState({ isRequested: true });
+        // TODO show success
+      } else {
+        // TODO show error
+      }
+      this.props.setLoading(false);
+    } catch (e) {
+      // TODO handle promise reject
+    }
+  };
 }
 
 function DetailsField(props) {

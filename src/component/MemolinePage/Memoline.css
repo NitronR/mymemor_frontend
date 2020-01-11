@@ -1,0 +1,16 @@
+#memoline-boundary {
+  width: 100%;
+  padding: 1rem;
+}
+
+#memoline-container {
+  display: grid;
+  width: 50%;
+  grid-template-columns: 1fr auto;
+  grid-column-gap: 1rem;
+  justify-content: center;
+  margin: auto;
+}
+#memoline-options {
+  width: 15rem;
+}
