@@ -143,7 +143,6 @@ class RegisterPage extends React.Component {
                 type="submit"
                 className="btn-primary"
                 value="Register"
-                required
               />
             </Form>
           </Card.Body>
