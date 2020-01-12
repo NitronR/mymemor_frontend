@@ -103,7 +103,7 @@ class MemolinePage extends React.Component {
                     <h5>Sort by</h5>
                   </Form.Label>
                   <Form.Control as="select">
-                    <option value="creation_time">Creation time</option>
+                    <option value="create_time">Creation time</option>
                     <option value="memory_time">Memory time</option>
                   </Form.Control>
                 </Form.Group>

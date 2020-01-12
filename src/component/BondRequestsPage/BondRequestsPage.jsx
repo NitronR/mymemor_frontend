@@ -1,8 +1,15 @@
 import "./BondRequestsPage.css";
 
+import ApiService from "../../service/ApiService";
+import PersonCard from "../ProfilePage/PersonCard/PersonCard";
 import React from "react";
+import RedirectIf from "../RedirectIf/RedirectIf";
+import { connect } from "react-redux";
+import { getUserState } from "../../selectors";
+import { setLoading } from "../../actions";
+import { toastSuccess } from "../../utils/Toast";
 
-export default class BondRequestsPage extends React.Component {
+class BondRequestsPage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -11,16 +18,112 @@ export default class BondRequestsPage extends React.Component {
     };
 
     this.handleReply = this.handleReply.bind(this);
+    this.fetchBondRequests = this.fetchBondRequests.bind(this);
+  }
+  componentDidMount() {
+    this.fetchBondRequests();
+  }
+  async fetchBondRequests() {
+    // start loading
+    this.props.setLoading(true);
+
+    try {
+      let response = await ApiService.getBondRequests();
+
+      // throw if not ok
+      if (response.status !== 200) {
+        throw new Error(response.statusText);
+      }
+
+      response = response.data;
+
+      if (response.status === "success") {
+        // update my people
+        this.setState({ bondRequests: response.bond_requests });
+      } else if (response.status === "error") {
+        // TODO show errors
+      } else {
+        // TODO something went wrong
+      }
+    } catch (e) {
+      // TODO handle promise reject
+    } finally {
+      // stop loading
+      this.props.setLoading(false);
+    }
   }
   render() {
     return (
       <div id="bond-requests-boundary">
-        <h1>Bond requests</h1>
-        {/* TODO */}
+        {/* Redirect to login if not logged in */}
+        <RedirectIf condition={!this.props.user.authenticated} to="/login" />
+
+        <div id="bond-requests-container" style={{ marginTop: "1rem" }}>
+          <h3>Bond requests</h3>
+
+          {/* Bond requests list */}
+          <div id="bond-requests-list">
+            {/* TODO show no bond requests */}
+            {this.state.bondRequests.map(bondRequest => (
+              <div style={{ padding: "0.3rem" }}>
+                <PersonCard
+                  profilePicURL={bondRequest.profile_pic_url}
+                  name={bondRequest.name}
+                  username={bondRequest.username}
+                  onAccept={() => this.handleReply(bondRequest.id, "accept")}
+                  onDecline={() => this.handleReply(bondRequest.id, "decline")}
+                  bondCard
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
-  handleReply(bondRequestId, response) {
-    // TODO
+  async handleReply(bondRequestId, action) {
+    // start loading
+    this.props.setLoading(true);
+
+    console.log({ bondRequestId, action });
+
+    try {
+      let response = await ApiService.bondResponseAction({
+        bond_request_id: bondRequestId,
+        action
+      });
+      // throw if not ok
+      if (response.status !== 200) {
+        throw new Error(response.statusText);
+      }
+
+      response = response.data;
+
+      if (response.status === "success") {
+        // TODO show success
+        toastSuccess(
+          "Bond Request " +
+            { accept: "accepted", decline: "declined" }[action] +
+            "."
+        );
+
+        // remove bond request of given id
+        this.setState({
+          bondRequests: this.state.bondRequests.filter(
+            bondRequest => bondRequest.id !== bondRequestId
+          )
+        });
+      } else {
+        // TODO show error
+      }
+    } catch (e) {
+      // TODO handle promise reject
+    } finally {
+      this.props.setLoading(false);
+    }
   }
 }
+
+const mapStateToProps = state => ({ user: getUserState(state) });
+
+export default connect(mapStateToProps, { setLoading })(BondRequestsPage);

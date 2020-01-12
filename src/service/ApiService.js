@@ -17,8 +17,14 @@ class ApiService {
     getMemoline() {
         return axios.get(API_BASE_URL + "/memoline");
     }
-    getMyPeople(){
-        return axios.get(API_BASE_URL+"/my-people")
+    getMyPeople() {
+        return axios.get(API_BASE_URL + "/my-people")
+    }
+    getBondRequests() {
+        return axios.get(API_BASE_URL + '/bond-requests');
+    }
+    bondResponseAction(actionData) {
+        return axios.post(API_BASE_URL + '/bond-request-action', actionData);
     }
 }
 

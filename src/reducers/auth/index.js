@@ -1,6 +1,7 @@
 import { LOGIN, LOGOUT } from "../../actions/types";
-import { createReducer } from "../utils"
 import { login, logout } from "./auth"
+
+import { createReducer } from "../utils"
 
 const initialState = {
     user: {

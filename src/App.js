@@ -1,23 +1,25 @@
-import React from 'react';
 import './App.css';
-import NavBar from './component/NavBar/NavBar'
-import LandingPage from './component/LandingPage';
-import LoginPage from './component/LoginPage';
-import RegisterPage from './component/RegisterPage';
-import MemolinePage from './component/MemolinePage';
+
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+
 import AboutPage from './component/AboutPage';
 import AddMemoryPage from './component/AddMemoryPage';
-import MyPeoplePage from './component/MyPeoplePage';
-import SearchPage from './component/SearchPage';
-import PageNotFound from './component/404';
 import BondRequestsPage from './component/BondRequestsPage';
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
-import ProfilePage from './component/ProfilePage/ProfilePage';
+import LandingPage from './component/LandingPage';
 import LoadingOverlay from 'react-loading-overlay';
+import LoginPage from './component/LoginPage';
+import MemolinePage from './component/MemolinePage';
+import MyPeoplePage from './component/MyPeoplePage';
+import NavBar from './component/NavBar/NavBar';
+import PageNotFound from './component/404';
+import ProfilePage from './component/ProfilePage/ProfilePage';
+import React from 'react';
+import RegisterPage from './component/RegisterPage';
+import SearchPage from './component/SearchPage';
 import { connect } from 'react-redux';
 import { isLoading } from './selectors';
-import { setLoading } from './actions'
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { setLoading } from './actions';
 
 class App extends React.Component {
   constructor(props) {
@@ -29,8 +31,8 @@ class App extends React.Component {
   }
   render() {
     return (
-      <div id="App">
-        <LoadingOverlay active={this.props.isLoading} spinner text="Loading...">
+      < div id="App" >
+        < LoadingOverlay active={this.props.isLoading} spinner text="Loading..." >
           <Router>
             <Route render={({ location }) => (
               <div id="app-container">
@@ -63,8 +65,8 @@ class App extends React.Component {
               </div>
             )} />
           </Router>
-        </LoadingOverlay>
-      </div>
+        </LoadingOverlay >
+      </div >
     );
   }
   sessionLogin() {

@@ -1,8 +1,9 @@
+import { Button, Card } from "react-bootstrap";
+
+import ApiService from "../../../service/ApiService";
 import React from "react";
 import { connect } from "react-redux";
 import { setLoading } from "../../../actions";
-import { Card, Button } from "react-bootstrap";
-import ApiService from "../../../service/ApiService";
 
 class PersonDetails extends React.Component {
   constructor(props) {
@@ -62,8 +63,6 @@ class PersonDetails extends React.Component {
 
       response = response.data;
 
-      console.log(response);
-
       if (response.status === "success") {
         // set isRequested
         this.setState({ isRequested: true });
@@ -71,9 +70,10 @@ class PersonDetails extends React.Component {
       } else {
         // TODO show error
       }
-      this.props.setLoading(false);
     } catch (e) {
       // TODO handle promise reject
+    } finally {
+      this.props.setLoading(false);
     }
   };
 }

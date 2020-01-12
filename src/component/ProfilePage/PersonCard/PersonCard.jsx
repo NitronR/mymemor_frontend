@@ -1,6 +1,7 @@
 import "./PersonCard.css";
 
-import { Card } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
+
 import React from "react";
 
 function PersonCard(props) {
@@ -24,6 +25,21 @@ function PersonCard(props) {
             <h5 className="person-card-username">@{props.username}</h5>
           </span>
         </div>
+        {/* Bond request part */}
+        {props.bondCard && (
+          <div className="text-right">
+            <Button
+              variant="primary"
+              onClick={props.onAccept}
+              style={{ marginRight: "0.5rem" }}
+            >
+              Accept
+            </Button>
+            <Button variant="danger" onClick={props.onDecline}>
+              Decline
+            </Button>
+          </div>
+        )}
       </Card.Body>
     </Card>
   );
