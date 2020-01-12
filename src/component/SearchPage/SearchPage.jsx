@@ -1,17 +1,16 @@
-import React from "react";
-import Card from "react-bootstrap/Card";
 import "./SearchPage.css";
+
+import Card from "react-bootstrap/Card";
+import React from "react";
+import RedirectIf from "../RedirectIf/RedirectIf";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
-import { Redirect } from "react-router-dom";
 
-function SearchPage() {
+function SearchPage(props) {
   return (
     <Card>
       {/* Redirect to login if not logged in */}
-      {!this.props.user.authenticated && <Redirect to="/login" />}
-
-      <h3>Search Page</h3>
+          <RedirectIf condition={!props.user.authenticated} to="/login" />
     </Card>
   );
 }

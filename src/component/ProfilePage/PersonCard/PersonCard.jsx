@@ -1,6 +1,7 @@
-import React from "react";
-import { Card } from "react-bootstrap";
 import "./PersonCard.css";
+
+import { Card } from "react-bootstrap";
+import React from "react";
 
 function PersonCard(props) {
   // TODO default pic url
@@ -19,8 +20,8 @@ function PersonCard(props) {
           />
           {/* Person name, username */}
           <span className="person-card-text">
-            <h2 className="person-card-name">{props.name}</h2>
-            <h3 className="person-card-username">@{props.username}</h3>
+            <h4 className="person-card-name">{props.name}</h4>
+            <h5 className="person-card-username">@{props.username}</h5>
           </span>
         </div>
       </Card.Body>

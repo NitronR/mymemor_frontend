@@ -1,11 +1,12 @@
-import React from "react";
-import Card from "react-bootstrap/Card";
 import "./RegisterPage.css";
+
+import ApiService from "../../service/ApiService";
+import Card from "react-bootstrap/Card";
 import { Form } from "react-bootstrap";
 import Input from "../Form/Input";
+import React from "react";
+import RedirectIf from "../RedirectIf";
 import checkUsername from "../../utils/Validation";
-import ApiService from "../../service/ApiService";
-import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
 
@@ -34,7 +35,7 @@ class RegisterPage extends React.Component {
     return (
       <div id="register-boundary">
         {/* Redirect to memoline if logged in */}
-        {this.props.user.authenticated && <Redirect to="/memoline" />}
+        <RedirectIf condition={this.props.user.authenticated} to="/memoline" />
 
         <Card className="main-card">
           <Card.Title>

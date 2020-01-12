@@ -1,12 +1,15 @@
-import React from "react";
-import { Button, Card, Form } from "react-bootstrap";
-import { connect } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
-import { setLoading } from "../../actions";
-import { getUserState } from "../../selectors";
-import ApiService from "../../service/ApiService";
-import MemoCard from "../MemoCard";
 import "./Memoline.css";
+
+import { Button, Card, Form } from "react-bootstrap";
+
+import ApiService from "../../service/ApiService";
+import { Link } from "react-router-dom";
+import MemoCard from "../MemoCard";
+import React from "react";
+import RedirectIf from "../RedirectIf/RedirectIf";
+import { connect } from "react-redux";
+import { getUserState } from "../../selectors";
+import { setLoading } from "../../actions";
 
 // TODO add scroll pagination
 class MemolinePage extends React.Component {
@@ -63,7 +66,8 @@ class MemolinePage extends React.Component {
       <div id="memoline-boundary">
         <div id="memoline-container">
           {/* Redirect to login if not logged in */}
-          {!this.props.user.authenticated && <Redirect to="/login" />}
+          <RedirectIf condition={!this.props.user.authenticated} to="/login" />
+
           {/* Memoline */}
           <div id="memoline">
             {this.state.memories.map((memory, idx) => (

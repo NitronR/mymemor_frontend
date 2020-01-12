@@ -1,16 +1,23 @@
-import React from "react";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
 import "./LandingPage.css";
-import { Link } from "react-router-dom";
 
-function LandingPage() {
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import { Link } from "react-router-dom";
+import React from "react";
+import RedirectIf from "../RedirectIf";
+import { connect } from "react-redux";
+import { getUserState } from "../../selectors";
+
+function LandingPage(props) {
   return (
     <div className="boundary-center">
+      {/* Redirect to memoline if logged in */}
+      <RedirectIf condition={props.user.authenticated} to="/memoline" />
+
       <Card id="landing-card">
         <h3>MyMemor</h3>
         <br />
-        <span style={{ "fontSize": "1.2rem" }}>The joy of memories</span>
+        <span style={{ fontSize: "1.2rem" }}>The joy of memories</span>
         <br />
         <br />
 
@@ -19,7 +26,7 @@ function LandingPage() {
         </Link>
 
         <Link to="/register">
-          <Button style={{ "marginTop": "0.5rem" }} className="button">
+          <Button style={{ marginTop: "0.5rem" }} className="button">
             Register
           </Button>
         </Link>
@@ -28,4 +35,6 @@ function LandingPage() {
   );
 }
 
-export default LandingPage;
+const mapStateToProps = state => ({ user: getUserState(state) });
+
+export default connect(mapStateToProps)(LandingPage);

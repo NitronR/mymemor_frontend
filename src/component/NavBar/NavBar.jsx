@@ -1,20 +1,19 @@
-import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+
+import { Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
+
 import { NavLink } from "react-router-dom";
-import { getUserState } from "../../selectors";
+import React from "react";
 import { connect } from "react-redux";
+import { getUserState } from "../../selectors";
 import { logoutUser } from "../../actions";
-import { NavDropdown, Nav, Container, Navbar } from "react-bootstrap";
 
 function NavBar({ user, logoutUser }) {
-  /* if user is authenticated then go to memoline else landing page*/
-  let brandLink = user.authenticated ? "/memoline" : "/";
-
   return (
     <Navbar bg="light" expand="lg">
       <Container>
         {/* brand */}
-        <Navbar.Brand as={NavLink} to={brandLink}>
+        <Navbar.Brand as={NavLink} to="/">
           MyMemor
         </Navbar.Brand>
 
@@ -46,7 +45,7 @@ function NavBar({ user, logoutUser }) {
               <Nav.Link as={NavLink} to="/memoline">
                 Memoline
               </Nav.Link>
-
+              
               {/* profile nav */}
               <Nav.Link as={NavLink} to={"/profile/" + user.username}>
                 Profile
@@ -55,6 +54,11 @@ function NavBar({ user, logoutUser }) {
               {/* MyPeople nav */}
               <Nav.Link as={NavLink} to="/my-people">
                 MyPeople
+              </Nav.Link>
+
+              {/* MyPeople nav */}
+              <Nav.Link as={NavLink} to="/bond-requests">
+                Bond Requests
               </Nav.Link>
 
               {/* Username nav dropdown -> login */}

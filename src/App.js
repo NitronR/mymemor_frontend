@@ -10,6 +10,7 @@ import AddMemoryPage from './component/AddMemoryPage';
 import MyPeoplePage from './component/MyPeoplePage';
 import SearchPage from './component/SearchPage';
 import PageNotFound from './component/404';
+import BondRequestsPage from './component/BondRequestsPage';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import ProfilePage from './component/ProfilePage/ProfilePage';
 import LoadingOverlay from 'react-loading-overlay';
@@ -52,6 +53,7 @@ class App extends React.Component {
                         <Route path="/about" component={AboutPage}></Route>
                         <Route path="/add-memory" component={AddMemoryPage}></Route>
                         <Route path="/my-people" component={MyPeoplePage}></Route>
+                        <Route path="/bond-requests" component={BondRequestsPage}></Route>
                         <Route path="/search" component={SearchPage}></Route>
                         <Route path="" component={PageNotFound}></Route>
                       </Switch>

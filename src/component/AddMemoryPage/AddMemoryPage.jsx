@@ -1,10 +1,15 @@
-import React from "react";
-import Card from "react-bootstrap/Card";
 import "./AddMemoryPage.css";
-import { Form, Alert } from "react-bootstrap";
-import Input from "../Form/Input";
-import { MAX_LEN_TOPIC } from '../../constants/fieldLimits';
+
+import { Alert, Form } from "react-bootstrap";
+
 import ApiService from "../../service/ApiService";
+import Card from "react-bootstrap/Card";
+import Input from "../Form/Input";
+import { MAX_LEN_TOPIC } from "../../constants/fieldLimits";
+import React from "react";
+import RedirectIf from "../RedirectIf/RedirectIf";
+import { connect } from "react-redux";
+import { getUserState } from "../../selectors";
 
 class AddMemoryPage extends React.Component {
   constructor(props) {
@@ -13,10 +18,10 @@ class AddMemoryPage extends React.Component {
       form_data: {
         topic: "",
         content: "",
-        photo_urls : [],
-        start_date : Date,
-        end_date : Date,
-        add_people : []
+        photo_urls: [],
+        start_date: Date,
+        end_date: Date,
+        add_people: []
       },
       errors: {},
       formInvalid: true
@@ -26,10 +31,10 @@ class AddMemoryPage extends React.Component {
 
   render() {
     return (
-      <div className="boundary-center">
+      <div id="add-memory-boundary">
         {/* Redirect to login if not logged in */}
-        {/* {!this.props.user.authenticated && <Redirect to="/login" />} */}
-        
+        <RedirectIf condition={!this.props.user.authenticated} to="/login" />
+
         <Card className="main-card">
           <Card.Title>
             {/* Add Memory heading */}
@@ -37,7 +42,11 @@ class AddMemoryPage extends React.Component {
           </Card.Title>
           <Card.Body>
             {/* Add Memory form */}
-            <Form id="addMemory-form" onSubmit={this.addMemory} className="text-left">
+            <Form
+              id="addMemory-form"
+              onSubmit={this.addMemory}
+              className="text-left"
+            >
               {/* Non field errors */}
               <Alert variant={"danger"} show={"non_field" in this.state.errors}>
                 {this.state.errors.non_field &&
@@ -96,6 +105,7 @@ class AddMemoryPage extends React.Component {
               />
 
               {/* Add People */}
+              {/* TODO people component */}
               <Input
                 name="add_people"
                 type="List"
@@ -127,12 +137,12 @@ class AddMemoryPage extends React.Component {
     switch (name) {
       case "topic":
         // topic should be in correct format
-        if (value.length == 0 || value.length > MAX_LEN_TOPIC) {
+        if (value.length === 0 || value.length > MAX_LEN_TOPIC) {
           errors[name].push("topic should be in valid range");
         }
         break;
       case "content":
-        // validation for content 
+        // validation for content
         break;
       case "photo_urls":
         // validation for photo_urls
@@ -140,10 +150,10 @@ class AddMemoryPage extends React.Component {
       case "start_date":
         // validation
         break;
-      case "end_date" :
+      case "end_date":
         // validation
         break;
-      case "add_people" :
+      case "add_people":
         // validation
         break;
       default:
@@ -191,5 +201,8 @@ class AddMemoryPage extends React.Component {
   };
 }
 
+const mapStateToProps = state => ({
+  user: getUserState(state)
+});
 
-export default AddMemoryPage;
+export default connect(mapStateToProps)(AddMemoryPage);

@@ -1,13 +1,16 @@
-import React from "react";
-import Card from "react-bootstrap/Card";
 import "./LoginPage.css";
-import { Form, Alert } from "react-bootstrap";
-import Input from "../Form/Input";
-import ApiService from "../../service/ApiService";
-import { Link, Redirect } from "react-router-dom";
-import { getUserState } from "../../selectors";
-import { connect } from "react-redux";
+
+import { Alert, Form } from "react-bootstrap";
 import { loginUser, setLoading } from "../../actions";
+
+import ApiService from "../../service/ApiService";
+import Card from "react-bootstrap/Card";
+import Input from "../Form/Input";
+import { Link } from "react-router-dom";
+import React from "react";
+import RedirectIf from "../RedirectIf";
+import { connect } from "react-redux";
+import { getUserState } from "../../selectors";
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -29,7 +32,7 @@ class LoginPage extends React.Component {
     return (
       <div className="boundary-center">
         {/* Redirect to memoline if logged in */}
-        {this.props.user.authenticated && <Redirect to="/memoline" />}
+        <RedirectIf condition={this.props.user.authenticated} to="/memoline" />
 
         <Card className="main-card">
           <Card.Title>

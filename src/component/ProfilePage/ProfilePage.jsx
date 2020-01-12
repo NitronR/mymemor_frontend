@@ -1,13 +1,15 @@
-import React from "react";
 import "./ProfilePage.css";
+
 import { getUserState, isLoading } from "../../selectors";
-import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
+
+import ApiService from "../../service/ApiService";
 import PersonCard from "./PersonCard";
 import PersonDetails from "./PersonDetails";
-import { setLoading } from "../../actions";
-import ApiService from "../../service/ApiService";
+import React from "react";
+import RedirectIf from "../RedirectIf/RedirectIf";
 import classNames from "classnames";
+import { connect } from "react-redux";
+import { setLoading } from "../../actions";
 
 class ProfilePage extends React.Component {
   constructor(props) {
@@ -49,12 +51,15 @@ class ProfilePage extends React.Component {
     return (
       <div className="boundary-center">
         {/* Redirect to login if not logged in */}
-        {!this.props.user.authenticated && <Redirect to="/login" />}
+        <RedirectIf condition={!this.props.user.authenticated} to="/login" />
 
         {/* person card and details container */}
 
         <div
-          className={classNames({ "profile-cards": true, "d-none": !isLoading })}
+          className={classNames({
+            "profile-cards": true,
+            "d-none": !isLoading
+          })}
         >
           <PersonCard
             profilePicURL={this.state.profile_pic_url}
