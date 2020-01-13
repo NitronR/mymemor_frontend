@@ -1,5 +1,6 @@
+import { Form, FormGroup } from "react-bootstrap";
+
 import React from "react";
-import { FormGroup, Form } from "react-bootstrap";
 
 class Input extends React.Component {
   render() {
@@ -14,6 +15,9 @@ class Input extends React.Component {
           required={this.props.required}
           isValid={this.props.errors && this.props.errors.length === 0}
           isInvalid={this.props.errors && this.props.errors.length !== 0}
+          // for text area
+          as={this.props.as}
+          rows={this.props.rows}
         />
         {/* for displaying errors */}
         <Form.Control.Feedback type="invalid">

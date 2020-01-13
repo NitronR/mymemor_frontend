@@ -18,7 +18,8 @@ class MemolinePage extends React.Component {
 
     this.state = {
       memories: [],
-      no_memories: false
+      no_memories: false,
+      sortBy: 'create_time'
     };
 
     this.fetchMemoline = this.fetchMemoline.bind(this);
@@ -33,7 +34,7 @@ class MemolinePage extends React.Component {
     this.props.setLoading(true);
 
     try {
-      let response = await ApiService.getMemoline();
+      let response = await ApiService.getMemoline(this.state.sortBy);
 
       // throw if not ok
       if (response.status !== 200) {
@@ -46,7 +47,6 @@ class MemolinePage extends React.Component {
         // show memories
 
         // TODO handle no memories
-
         this.setState({ memories: response.memories });
       } else {
         // TODO show error

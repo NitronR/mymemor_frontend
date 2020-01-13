@@ -32,11 +32,7 @@ function NavBar({ user, logoutUser }) {
               <Nav.Link as={NavLink} to="/register">
                 Register
               </Nav.Link>
-
-              {/* about nav */}
-              <Nav.Link as={NavLink} to="/about">
-                About
-              </Nav.Link>
+              
             </Nav>
           )}
           {user.authenticated && (

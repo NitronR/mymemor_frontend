@@ -20,6 +20,7 @@ class RegisterPage extends React.Component {
         email: "",
         password: "",
         confirm_password: "",
+        profile_pic_url: "",
         hometown: "",
         current_city: "",
         school: "",
@@ -94,6 +95,16 @@ class RegisterPage extends React.Component {
                 label="Confirm password"
                 type="password"
                 errors={this.state.errors.confirm_password}
+                onChange={this.handleInput}
+                required
+              />
+
+              {/* Profile picture field field */}
+              <Input
+                name="profile_pic_url"
+                label="Profile picture URL"
+                type="text"
+                errors={this.state.errors.profile_pic_url̥}
                 onChange={this.handleInput}
                 required
               />

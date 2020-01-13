@@ -64,6 +64,7 @@ class LoginPage extends React.Component {
                 name="password"
                 type="password"
                 label="Password"
+                onChange={this.handleInput}
                 required
               />
 

@@ -31,10 +31,16 @@ class ProfilePage extends React.Component {
     this.props.setLoading(true);
     // fetch users
     // TODO handle promise reject
-    ApiService.getProfile(this.state.username).then(response => {
-      this.props.setLoading(false);
+    try {
+      let response = await ApiService.getProfile(this.state.username);
 
+      // throw if not ok
+      if (response.status !== 200) {
+        throw new Error(response.statusText);
+      }
+      
       response = response.data;
+
       if (response.status === "success") {
         // set profile data in state
         let profile = response.user;
@@ -45,7 +51,11 @@ class ProfilePage extends React.Component {
       } else {
         // TODO something went wrong
       }
-    });
+    } catch (e) {
+      // TODO handle promise reject
+    } finally {
+      this.props.setLoading(false);
+    }
   }
   render() {
     return (
