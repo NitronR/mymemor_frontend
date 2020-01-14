@@ -1,5 +1,7 @@
 import "./RegisterPage.css";
 
+import { toastError, toastSuccess } from "../../utils/Toast";
+
 import ApiService from "../../service/ApiService";
 import Card from "react-bootstrap/Card";
 import { Form } from "react-bootstrap";
@@ -9,6 +11,7 @@ import RedirectIf from "../RedirectIf";
 import checkUsername from "../../utils/Validation";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
+import { setLoading } from "../../actions";
 
 class RegisterPage extends React.Component {
   constructor(props) {
@@ -104,7 +107,7 @@ class RegisterPage extends React.Component {
                 name="profile_pic_url"
                 label="Profile picture URL"
                 type="text"
-                errors={this.state.errors.profile_pic_url̥}
+                errors={this.state.errors.profile_pic_url}
                 onChange={this.handleInput}
                 required
               />
@@ -225,21 +228,33 @@ class RegisterPage extends React.Component {
 
     if (!this.state.formInvalid) {
       // send to api service and get response
-      // TODO handle promise reject
-      // TODO show loading
-      ApiService.register(this.state.form_data).then(response => {
+
+      this.props.setLoading(true);
+
+      try {
+        let response = await ApiService.register(this.state.form_data);
+
+        if (response.status !== 200) throw new Error(response.statusText);
+
         response = response.data;
+
         if (response.status === "success") {
+          // show success
+          toastSuccess("Registered successfully.");
           // redirect to login
-          // TODO show success
           this.props.history.push("/login");
         } else if (response.status === "error") {
           // show errors
           this.setState({ errors: response.errors });
         } else {
-          // TODO something went wrong
+          toastError("Something went wrong");
         }
-      });
+      } catch (e) {
+        // handle promise reject
+        toastError(e.toString());
+      } finally {
+        this.props.setLoading(false);
+      }
     }
   };
 }
@@ -249,4 +264,4 @@ const mapStateToProps = state => {
   return { user };
 };
 
-export default connect(mapStateToProps)(RegisterPage);
+export default connect(mapStateToProps, { setLoading })(RegisterPage);

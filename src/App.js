@@ -56,7 +56,7 @@ class App extends React.Component {
                         <Route path="/add-memory" component={AddMemoryPage}></Route>
                         <Route path="/my-people" component={MyPeoplePage}></Route>
                         <Route path="/bond-requests" component={BondRequestsPage}></Route>
-                        <Route path="/search" component={SearchPage}></Route>
+                        <Route path="/search/:query" component={SearchPage}></Route>
                         <Route path="" component={PageNotFound}></Route>
                       </Switch>
                     </CSSTransition>

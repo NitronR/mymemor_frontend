@@ -20,7 +20,7 @@ class AddMemoryPage extends React.Component {
       form_data: {
         topic: "",
         content: "",
-        photo_urls: [],
+        photo_urls: "",
         start_date: "",
         end_date: "",
         people: []
