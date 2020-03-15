@@ -10,6 +10,8 @@ import React from "react";
 import RedirectIf from "../RedirectIf/RedirectIf";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
+import { setLoading } from "../../actions";
+import { toastSuccess } from "../../utils/Toast";
 
 class AddMemoryPage extends React.Component {
   constructor(props) {
@@ -18,10 +20,10 @@ class AddMemoryPage extends React.Component {
       form_data: {
         topic: "",
         content: "",
-        photo_urls: [],
-        start_date: Date,
-        end_date: Date,
-        add_people: []
+        photo_urls: "",
+        start_date: "",
+        end_date: "",
+        people: []
       },
       errors: {},
       formInvalid: true
@@ -43,7 +45,7 @@ class AddMemoryPage extends React.Component {
           <Card.Body>
             {/* Add Memory form */}
             <Form
-              id="addMemory-form"
+              id="add-memory-form"
               onSubmit={this.addMemory}
               className="text-left"
             >
@@ -70,19 +72,21 @@ class AddMemoryPage extends React.Component {
                 name="content"
                 type="text"
                 label="Content"
-                errors={this.state.errors.label}
+                errors={this.state.errors.content}
                 onChange={this.handleInput}
                 required
               />
 
               {/* Photo Urls */}
+              {/* TODO photo url component with URL validation*/}
               <Input
                 name="photo_urls"
                 type="List"
                 label="Photo Urls (Line Seperated)"
                 errors={this.state.errors.photo_urls}
                 onChange={this.handleInput}
-                required
+                as="textarea"
+                rows="3"
               />
 
               {/* Start Date */}
@@ -92,7 +96,6 @@ class AddMemoryPage extends React.Component {
                 label="Start Date"
                 errors={this.state.errors.start_date}
                 onChange={this.handleInput}
-                required
               />
 
               {/* End Date */}
@@ -138,23 +141,25 @@ class AddMemoryPage extends React.Component {
       case "topic":
         // topic should be in correct format
         if (value.length === 0 || value.length > MAX_LEN_TOPIC) {
-          errors[name].push("topic should be in valid range");
+          errors[name].push(
+            `Cannot have more than ${MAX_LEN_TOPIC} characters.`
+          );
         }
         break;
       case "content":
-        // validation for content
+        // TODO validation for content
         break;
       case "photo_urls":
-        // validation for photo_urls
+        // TODO validation for photo_urls
         break;
       case "start_date":
-        // validation
+        // TODO validation
         break;
       case "end_date":
-        // validation
+        // TODO validation
         break;
       case "add_people":
-        // validation
+        // TODO validation
         break;
       default:
         delete errors[name];
@@ -183,20 +188,49 @@ class AddMemoryPage extends React.Component {
     if (!this.state.formInvalid) {
       // send to api service and get response
       // TODO handle promise reject
-      // TODO show loading
-      ApiService.register(this.state.form_data).then(response => {
+      // TODO show loadingevent.preventDefault();
+
+      let photos = this.state.form_data.photo_urls.split("\n");
+
+      // clear errors
+      this.setState({ errors: {} });
+
+      // verify credentials
+
+      // show loading
+      this.props.setLoading(true);
+
+      try {
+        let response = await ApiService.addMemory({
+          ...this.state.form_data,
+          photos
+        });
+
+        // throw if not ok
+        if (response.status !== 200) {
+          throw new Error(response.statusText);
+        }
+
         response = response.data;
+
         if (response.status === "success") {
-          // redirect to login
-          // TODO show success
-          this.props.history.push("/login");
+          // show success
+          toastSuccess("Memory added");
+
+          // redirect to memoline
+          this.props.history.push("/memoline");
         } else if (response.status === "error") {
-          // show errors
+          // show error in form
           this.setState({ errors: response.errors });
         } else {
           // TODO something went wrong
         }
-      });
+      } catch (e) {
+        // TODO handle promise reject
+      } finally {
+        // stop loading
+        this.props.setLoading(false);
+      }
     }
   };
 }
@@ -205,4 +239,4 @@ const mapStateToProps = state => ({
   user: getUserState(state)
 });
 
-export default connect(mapStateToProps)(AddMemoryPage);
+export default connect(mapStateToProps, { setLoading })(AddMemoryPage);

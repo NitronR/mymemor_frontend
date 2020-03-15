@@ -9,10 +9,7 @@ class PersonDetails extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      isBonded: this.props.isBonded,
-      isRequested: this.props.isRequested
-    };
+    this.state = {};
 
     this.handleBondRequest = this.handleBondRequest.bind(this);
   }
@@ -35,7 +32,13 @@ class PersonDetails extends React.Component {
           <DetailsField label="College" value={this.props.college} />
 
           {/* Submit bond request button */}
-          {!(this.state.isBonded || this.state.isRequested) && (
+          {/* TODO improve */}
+          {!(
+            this.props.isBonded ||
+            this.props.isRequested ||
+            this.state.isRequested ||
+            this.props.isSelf
+          ) && (
             <div
               className="d-flex justify-content-center"
               style={{ marginTop: "1rem" }}

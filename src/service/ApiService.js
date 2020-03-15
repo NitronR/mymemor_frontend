@@ -1,30 +1,40 @@
 import API_BASE_URL from '../api_config';
 import axios from 'axios';
+import { jsonToFormData } from '../reducers/utils';
 
 class ApiService {
     register(userData) {
         return axios.post(API_BASE_URL + "/register", userData);
     }
     login(userCreds) {
-        return axios.post(API_BASE_URL + "/login", userCreds);
+        return axios.post(API_BASE_URL + "/login", userCreds, { withCredentials: true });
     }
     getProfile(username) {
-        return axios.get(API_BASE_URL + "/profile/" + username);
+        return axios.get(API_BASE_URL + "/profile/" + username, { withCredentials: true });
     }
     sendBondRequest(username) {
-        return axios.post(API_BASE_URL + "/send-bond-request", { username });
+        let form_data = new FormData();
+        form_data.append("username", username);
+        return axios.post(API_BASE_URL + "/send-bond-request", form_data, { withCredentials: true });
     }
-    getMemoline() {
-        return axios.get(API_BASE_URL + "/memoline");
+    getMemoline(sortBy) {
+        return axios.get(API_BASE_URL + "/memoline/" + sortBy, { withCredentials: true });
     }
     getMyPeople() {
-        return axios.get(API_BASE_URL + "/my-people")
+        return axios.get(API_BASE_URL + "/my-people", { withCredentials: true })
     }
     getBondRequests() {
-        return axios.get(API_BASE_URL + '/bond-requests');
+        return axios.get(API_BASE_URL + '/bond-requests', { withCredentials: true });
     }
-    bondResponseAction(actionData) {
-        return axios.post(API_BASE_URL + '/bond-request-action', actionData);
+    bondRequestAction(actionData) {
+        actionData['action'] = { 'accept': 0, 'decline': 1 }[actionData['action']]
+        return axios.post(API_BASE_URL + '/bond-request-action', jsonToFormData(actionData), { withCredentials: true });
+    }
+    addMemory(memData) {
+        return axios.post(API_BASE_URL + '/add-memory', memData, { withCredentials: true });
+    }
+    search(query, page) {
+        return axios.get(`${API_BASE_URL}/search/${query}/${page}`);
     }
 }
 

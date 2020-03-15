@@ -1,5 +1,7 @@
 import "./BondRequestsPage.css";
 
+import { toastError, toastSuccess } from "../../utils/Toast";
+
 import ApiService from "../../service/ApiService";
 import PersonCard from "../ProfilePage/PersonCard/PersonCard";
 import React from "react";
@@ -7,7 +9,6 @@ import RedirectIf from "../RedirectIf/RedirectIf";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
 import { setLoading } from "../../actions";
-import { toastSuccess } from "../../utils/Toast";
 
 class BondRequestsPage extends React.Component {
   constructor(props) {
@@ -39,14 +40,14 @@ class BondRequestsPage extends React.Component {
 
       if (response.status === "success") {
         // update my people
-        this.setState({ bondRequests: response.bond_requests });
+        this.setState({ bondRequests: response.bondRequests });
       } else if (response.status === "error") {
-        // TODO show errors
+        toastError(response.error);
       } else {
-        // TODO something went wrong
+        toastError("Something went wrong");
       }
     } catch (e) {
-      // TODO handle promise reject
+        toastError(e.toString());
     } finally {
       // stop loading
       this.props.setLoading(false);
@@ -67,9 +68,9 @@ class BondRequestsPage extends React.Component {
             {this.state.bondRequests.map(bondRequest => (
               <div style={{ padding: "0.3rem" }}>
                 <PersonCard
-                  profilePicURL={bondRequest.profile_pic_url}
-                  name={bondRequest.name}
-                  username={bondRequest.username}
+                  profilePicURL={bondRequest.sender.profile_pic_url}
+                  name={bondRequest.sender.name}
+                  username={bondRequest.sender.username}
                   onAccept={() => this.handleReply(bondRequest.id, "accept")}
                   onDecline={() => this.handleReply(bondRequest.id, "decline")}
                   bondCard
@@ -85,10 +86,8 @@ class BondRequestsPage extends React.Component {
     // start loading
     this.props.setLoading(true);
 
-    console.log({ bondRequestId, action });
-
     try {
-      let response = await ApiService.bondResponseAction({
+      let response = await ApiService.bondRequestAction({
         bond_request_id: bondRequestId,
         action
       });

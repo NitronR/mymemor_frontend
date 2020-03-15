@@ -23,29 +23,47 @@ class ProfilePage extends React.Component {
       current_city: "",
       school: "",
       college: "",
-      is_bonded: "",
-      is_requested: ""
+      isBonded: false,
+      isRequested: false
     };
   }
   async componentDidMount() {
     this.props.setLoading(true);
     // fetch users
     // TODO handle promise reject
-    ApiService.getProfile(this.state.username).then(response => {
-      this.props.setLoading(false);
+    try {
+      let response = await ApiService.getProfile(this.state.username);
+
+      // throw if not ok
+      if (response.status !== 200) {
+        throw new Error(response.statusText);
+      }
 
       response = response.data;
+
       if (response.status === "success") {
         // set profile data in state
         let profile = response.user;
-        this.setState({ ...profile }, () => console.log(this.state));
+        console.log(response)
+        this.setState(
+          {
+            ...profile,
+            isRequested: response.requested,
+            isBonded: response.bonded
+          },
+          () => console.log(this.state)
+        );
       } else if (response.status === "error") {
         // set error
         this.setState({ error: response.error });
       } else {
         // TODO something went wrong
       }
-    });
+    } catch (e) {
+      // TODO handle promise reject
+    } finally {
+      this.props.setLoading(false);
+    }
   }
   render() {
     return (
@@ -73,8 +91,9 @@ class ProfilePage extends React.Component {
             hometown={this.state.hometown}
             school={this.state.school}
             college={this.state.college}
-            isBonded={this.state.is_bonded}
-            isRequested={this.state.is_requested}
+            isBonded={this.state.isBonded}
+            isRequested={this.state.isRequested}
+            isSelf={this.state.username === this.props.user.username}
           />
         </div>
       </div>
