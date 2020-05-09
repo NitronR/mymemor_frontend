@@ -23,10 +23,10 @@ class AddMemoryPage extends React.Component {
         photo_urls: "",
         start_date: "",
         end_date: "",
-        people: []
+        people: [],
       },
       errors: {},
-      formInvalid: true
+      formInvalid: true,
     };
     this.handleInput = this.handleInput.bind(this);
   }
@@ -166,23 +166,23 @@ class AddMemoryPage extends React.Component {
     }
 
     // if even one error then return form is invalid
-    let formInvalid = Object.keys(errors).some(field => {
+    let formInvalid = Object.keys(errors).some((field) => {
       return errors[field].length !== 0;
     });
 
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return {
         form_data: {
           ...prevState.form_data,
-          [name]: value
+          [name]: value,
         },
         errors: errors,
-        formInvalid: formInvalid
+        formInvalid: formInvalid,
       };
     });
   }
 
-  addMemory = async event => {
+  addMemory = async (event) => {
     event.preventDefault();
 
     if (!this.state.formInvalid) {
@@ -203,7 +203,7 @@ class AddMemoryPage extends React.Component {
       try {
         let response = await ApiService.addMemory({
           ...this.state.form_data,
-          photos
+          photos,
         });
 
         // throw if not ok
@@ -235,8 +235,8 @@ class AddMemoryPage extends React.Component {
   };
 }
 
-const mapStateToProps = state => ({
-  user: getUserState(state)
+const mapStateToProps = (state) => ({
+  user: getUserState(state),
 });
 
 export default connect(mapStateToProps, { setLoading })(AddMemoryPage);
