@@ -4,7 +4,7 @@ import ApiService from "../../service/ApiService";
 import { Link } from "react-router-dom";
 import PersonCard from "../ProfilePage/PersonCard/PersonCard";
 import React from "react";
-import RedirectIf from "../RedirectIf/RedirectIf";
+import RedirectIf from "../../component/RedirectIf";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
 import { setLoading } from "../../actions";

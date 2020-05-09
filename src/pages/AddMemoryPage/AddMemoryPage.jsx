@@ -4,10 +4,10 @@ import { Alert, Form } from "react-bootstrap";
 
 import ApiService from "../../service/ApiService";
 import Card from "react-bootstrap/Card";
-import Input from "../Form/Input";
+import Input from "../../component/Form/Input";
 import { MAX_LEN_TOPIC } from "../../constants/fieldLimits";
 import React from "react";
-import RedirectIf from "../RedirectIf/RedirectIf";
+import RedirectIf from "../../component/RedirectIf";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
 import { setLoading } from "../../actions";

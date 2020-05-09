@@ -4,9 +4,9 @@ import { Button, Card, ListGroup } from "react-bootstrap";
 
 import ApiService from "../../service/ApiService";
 import { Link } from "react-router-dom";
-import MemoCard from "../MemoCard";
+import MemoCard from "../../component/MemoCard";
 import React from "react";
-import RedirectIf from "../RedirectIf/RedirectIf";
+import RedirectIf from "../../component/RedirectIf";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
 import { setLoading } from "../../actions";

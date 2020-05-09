@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 import React from "react";
-import RedirectIf from "../RedirectIf";
+import RedirectIf from "../../component/RedirectIf";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
 

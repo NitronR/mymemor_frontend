@@ -5,10 +5,10 @@ import { loginUser, setLoading } from "../../actions";
 
 import ApiService from "../../service/ApiService";
 import Card from "react-bootstrap/Card";
-import Input from "../Form/Input";
+import Input from "../../component/Form/Input/Input";
 import { Link } from "react-router-dom";
 import React from "react";
-import RedirectIf from "../RedirectIf";
+import RedirectIf from "../../component/RedirectIf/RedirectIf";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
 
