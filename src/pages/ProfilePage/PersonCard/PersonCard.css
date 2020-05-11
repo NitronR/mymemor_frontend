@@ -12,3 +12,18 @@
 .person-card-text {
   padding-left: 2rem;
 }
+.person-card-pic.small {
+  width: 3rem;
+  height: 3rem;
+  margin: 0.5rem;
+}
+.selected {
+  background-color: #2D91E7 !important;
+}
+.selectable {
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.selectable:hover {
+  background-color: #5CAAED;
+}

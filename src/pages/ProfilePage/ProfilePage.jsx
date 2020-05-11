@@ -24,7 +24,7 @@ class ProfilePage extends React.Component {
       school: "",
       college: "",
       isBonded: false,
-      isRequested: false
+      isRequested: false,
     };
   }
   async componentDidMount() {
@@ -44,12 +44,11 @@ class ProfilePage extends React.Component {
       if (response.status === "success") {
         // set profile data in state
         let profile = response.user;
-        console.log(response)
         this.setState(
           {
             ...profile,
             isRequested: response.requested,
-            isBonded: response.bonded
+            isBonded: response.bonded,
           },
           () => console.log(this.state)
         );
@@ -76,14 +75,10 @@ class ProfilePage extends React.Component {
         <div
           className={classNames({
             "profile-cards": true,
-            "d-none": !isLoading
+            "d-none": !isLoading,
           })}
         >
-          <PersonCard
-            profilePicURL={this.state.profile_pic_url}
-            name={this.state.name}
-            username={this.state.username}
-          />
+          <PersonCard person={this.state} />
           <br />
           <PersonDetails
             username={this.state.username}
@@ -101,7 +96,7 @@ class ProfilePage extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   let user = getUserState(state),
     loading = isLoading(state);
   return { user, isLoading: loading };

@@ -1,6 +1,6 @@
 import "./AddMemoryPage.css";
 
-import { Alert, Form } from "react-bootstrap";
+import { Alert, Col, Form, Row } from "react-bootstrap";
 
 import ApiService from "../../service/ApiService";
 import Card from "react-bootstrap/Card";
@@ -8,6 +8,7 @@ import Input from "../../component/Form/Input";
 import { MAX_LEN_TOPIC } from "../../constants/fieldLimits";
 import React from "react";
 import RedirectIf from "../../component/RedirectIf";
+import SelectPeopleList from "../../component/SelectPeopleList/SelectPeopleList";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
 import { setLoading } from "../../actions";
@@ -23,21 +24,54 @@ class AddMemoryPage extends React.Component {
         photo_urls: "",
         start_date: "",
         end_date: "",
-        people: [],
+        peopleIds: [],
       },
       errors: {},
+      myPeople: [],
       formInvalid: true,
     };
     this.handleInput = this.handleInput.bind(this);
   }
+  componentDidMount() {
+    // fetch my people
+    this.fetchMyPeople();
+  }
+  async fetchMyPeople() {
+    // start loading
+    this.props.setLoading(true);
 
+    try {
+      let response = await ApiService.getMyPeople();
+
+      // throw if not ok
+      if (response.status !== 200) {
+        throw new Error(response.statusText);
+      }
+
+      response = response.data;
+
+      if (response.status === "success") {
+        // update my people
+        this.setState({ myPeople: response.people });
+      } else if (response.status === "error") {
+        // TODO show errors
+      } else {
+        // TODO something went wrong
+      }
+    } catch (e) {
+      // TODO handle promise reject
+    } finally {
+      // stop loading
+      this.props.setLoading(false);
+    }
+  }
   render() {
     return (
       <div id="add-memory-boundary">
         {/* Redirect to login if not logged in */}
         <RedirectIf condition={!this.props.user.authenticated} to="/login" />
 
-        <Card className="main-card">
+        <Card className="main-card" style={{ width: "40rem" }}>
           <Card.Title>
             {/* Add Memory heading */}
             <h3>Add Memory</h3>
@@ -56,7 +90,6 @@ class AddMemoryPage extends React.Component {
                     <div key={idx}>{error}</div>
                   ))}
               </Alert>
-
               {/* Topic */}
               <Input
                 name="topic"
@@ -66,7 +99,6 @@ class AddMemoryPage extends React.Component {
                 onChange={this.handleInput}
                 required
               />
-
               {/* Content */}
               <Input
                 name="content"
@@ -74,9 +106,10 @@ class AddMemoryPage extends React.Component {
                 label="Content"
                 errors={this.state.errors.content}
                 onChange={this.handleInput}
+                as="textarea"
+                rows="3"
                 required
               />
-
               {/* Photo Urls */}
               {/* TODO photo url component with URL validation*/}
               <Input
@@ -88,35 +121,44 @@ class AddMemoryPage extends React.Component {
                 as="textarea"
                 rows="3"
               />
-
-              {/* Start Date */}
-              <Input
-                name="start_date"
-                type="Date"
-                label="Start Date"
-                errors={this.state.errors.start_date}
-                onChange={this.handleInput}
+              <Row>
+                <Col>
+                  {/* Start Date */}
+                  <Input
+                    name="start_date"
+                    type="Date"
+                    label="Start Date"
+                    errors={this.state.errors.start_date}
+                    onChange={this.handleInput}
+                  />
+                </Col>
+                <Col>
+                  {/* End Date */}
+                  <Input
+                    name="end_date"
+                    type="Date"
+                    label="End Date"
+                    errors={this.state.errors.end_date}
+                    onChange={this.handleInput}
+                  />
+                </Col>
+              </Row>
+              {/* Select People */}
+              Select people
+              <SelectPeopleList
+                style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                people={this.state.myPeople}
+                peopleIds={this.state.form_data.peopleIds}
+                // update peopleIds list on change
+                onChange={(selectedPeopleIds) =>
+                  this.setState({
+                    form_data: {
+                      ...this.state.form_data,
+                      peopleIds: selectedPeopleIds,
+                    },
+                  })
+                }
               />
-
-              {/* End Date */}
-              <Input
-                name="end_date"
-                type="Date"
-                label="End Date"
-                errors={this.state.errors.end_date}
-                onChange={this.handleInput}
-              />
-
-              {/* Add People */}
-              {/* TODO people component */}
-              <Input
-                name="add_people"
-                type="List"
-                label="Add People"
-                errors={this.state.errors.add_people}
-                onChange={this.handleInput}
-              />
-
               {/* Add Memory button */}
               <Form.Control
                 type="submit"
@@ -156,9 +198,6 @@ class AddMemoryPage extends React.Component {
         // TODO validation
         break;
       case "end_date":
-        // TODO validation
-        break;
-      case "add_people":
         // TODO validation
         break;
       default:
