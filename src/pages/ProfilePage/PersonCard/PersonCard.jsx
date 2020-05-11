@@ -6,24 +6,47 @@ import React from "react";
 
 function PersonCard(props) {
   // TODO default pic url
-  let profilePicURL =
-    props.profilePicURL === "" ? "default" : props.profilePicURL;
+  let profile_pic_url =
+    props.person.profile_pic_url === ""
+      ? "default"
+      : props.person.profile_pic_url;
 
   return (
-    <Card className="person-card">
+    <Card
+      className={
+        "person-card" +
+        (props.selectable ? " selectable" : "") +
+        (props.selected ? " selected" : "")
+      }
+      onClick={() => {
+        if (props.selectable)
+          props.onSelectChange(props.person.id, !props.selected);
+      }}
+      {...props}
+    >
       <Card.Body className="person-card-body">
         <div className="person-card-content">
           {/* Person image */}
-          <img
-            src={profilePicURL}
-            className="person-card-pic"
-            alt="profile-pic"
-          />
+          <div>
+            <img
+              src={profile_pic_url}
+              className={`person-card-pic ${props.size}`}
+              alt="profile-pic"
+            />
+          </div>
           {/* Person name, username */}
-          <span className="person-card-text">
-            <h4 className="person-card-name">{props.name}</h4>
-            <h5 className="person-card-username">@{props.username}</h5>
-          </span>
+          {props.size === "" && (
+            <span className="person-card-text">
+              <h4 className="person-card-name">{props.person.name}</h4>
+              <h5 className="person-card-username">@{props.person.username}</h5>
+            </span>
+          )}
+          {props.size === "small" && (
+            <span className="person-card-text">
+              <h5 className="person-card-name">{props.person.name}</h5>
+              <h6 className="person-card-username">@{props.person.username}</h6>
+            </span>
+          )}
         </div>
         {/* Bond request part */}
         {props.bondCard && (
@@ -44,5 +67,9 @@ function PersonCard(props) {
     </Card>
   );
 }
+
+PersonCard.defaultProps = {
+  size: "",
+};
 
 export default PersonCard;

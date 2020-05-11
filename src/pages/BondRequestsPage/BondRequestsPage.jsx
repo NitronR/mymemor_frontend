@@ -68,9 +68,7 @@ class BondRequestsPage extends React.Component {
             {this.state.bondRequests.map(bondRequest => (
               <div style={{ padding: "0.3rem" }}>
                 <PersonCard
-                  profilePicURL={bondRequest.sender.profile_pic_url}
-                  name={bondRequest.sender.name}
-                  username={bondRequest.sender.username}
+                  person={bondRequest.sender}
                   onAccept={() => this.handleReply(bondRequest.id, "accept")}
                   onDecline={() => this.handleReply(bondRequest.id, "decline")}
                   bondCard

@@ -14,7 +14,7 @@ class MyPeoplePage extends React.Component {
     super(props);
 
     this.state = {
-      myPeople: []
+      myPeople: [],
     };
 
     this.fetchMyPeople = this.fetchMyPeople.bind(this);
@@ -39,7 +39,6 @@ class MyPeoplePage extends React.Component {
 
       if (response.status === "success") {
         // update my people
-        console.log(response.people);
         this.setState({ myPeople: response.people });
       } else if (response.status === "error") {
         // TODO show errors
@@ -65,16 +64,12 @@ class MyPeoplePage extends React.Component {
           {/* MyPeople list */}
           <div id="my-people-list">
             {/* TODO show no MyPeople */}
-            {this.state.myPeople.map(person => (
+            {this.state.myPeople.map((person) => (
               <Link
                 to={"/profile/" + person.username}
                 style={{ padding: "0.1rem", textDecoration: "none" }}
               >
-                <PersonCard
-                  profilePicURL={person.profile_pic_url}
-                  name={person.name}
-                  username={person.username}
-                />
+                <PersonCard person={person} />
               </Link>
             ))}
           </div>
@@ -84,7 +79,7 @@ class MyPeoplePage extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   let user = getUserState(state);
   return { user };
 };

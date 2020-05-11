@@ -80,9 +80,7 @@ class SearchPage extends React.Component {
                   style={{ padding: "0.1rem", textDecoration: "none" }}
                 >
                   <PersonCard
-                    profilePicURL={searchResult.profile_pic_url}
-                    name={searchResult.name}
-                    username={searchResult.username}
+                    person={searchResult}
                   />
                 </Link>
               );
