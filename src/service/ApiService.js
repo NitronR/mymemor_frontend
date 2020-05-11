@@ -9,6 +9,12 @@ class ApiService {
     login(userCreds) {
         return axios.post(API_BASE_URL + "/login", userCreds, { withCredentials: true });
     }
+    logout() {
+        return axios.get(API_BASE_URL + "/logout", { withCredentials: true });
+    }
+    getSessionUser() {
+        return axios.post(API_BASE_URL + '/get_session_user', {}, { withCredentials: true });
+    }
     getProfile(username) {
         return axios.get(API_BASE_URL + "/profile/" + username, { withCredentials: true });
     }
@@ -17,8 +23,8 @@ class ApiService {
         form_data.append("username", username);
         return axios.post(API_BASE_URL + "/send-bond-request", form_data, { withCredentials: true });
     }
-    getMemoline(sortBy) {
-        return axios.get(API_BASE_URL + "/memoline/" + sortBy, { withCredentials: true });
+    getMemoline(sortBy, order) {
+        return axios.get(`${API_BASE_URL}/memoline/${sortBy}/${order}`, { withCredentials: true });
     }
     getMyPeople() {
         return axios.get(API_BASE_URL + "/my-people", { withCredentials: true })

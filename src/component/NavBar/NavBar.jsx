@@ -2,23 +2,25 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import { Container, Form, Nav, NavDropdown, Navbar } from "react-bootstrap";
 import { NavLink, withRouter } from "react-router-dom";
+import { logoutUser, setLoading } from "../../actions";
 
+import ApiService from "../../service/ApiService";
 import Input from "../Form/Input/Input";
 import React from "react";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
-import { logoutUser } from "../../actions";
 
 class NavBar extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      search: ""
+      search: "",
     };
 
     this.handleSearch = this.handleSearch.bind(this);
     this.handleInput = this.handleInput.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
   render() {
@@ -88,7 +90,7 @@ class NavBar extends React.Component {
                   title={"@" + this.props.user.username}
                   id="username-dropdown"
                 >
-                  <NavDropdown.Item onClick={this.props.logoutUser}>
+                  <NavDropdown.Item onClick={this.handleLogout}>
                     Logout
                   </NavDropdown.Item>
                 </NavDropdown>
@@ -109,11 +111,39 @@ class NavBar extends React.Component {
     event.preventDefault();
     this.props.history.push("/search/" + this.state.search);
   }
+  async handleLogout() {
+    this.props.setLoading(true);
+
+    try {
+      let response = await ApiService.logout();
+
+      // throw if not ok
+      if (response.status !== 200) {
+        throw new Error(response.statusText);
+      }
+
+      response = response.data;
+
+      if (response.status === "success") {
+        this.props.logoutUser();
+        this.props.history.push("/login");
+      } else {
+        // TODO show error
+      }
+    } catch (e) {
+      // TODO handle promise reject
+    } finally {
+      // stop loading
+      this.props.setLoading(false);
+    }
+  }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   let user = getUserState(state);
   return { user };
 };
 
-export default withRouter(connect(mapStateToProps, { logoutUser })(NavBar));
+export default withRouter(
+  connect(mapStateToProps, { logoutUser, setLoading })(NavBar)
+);

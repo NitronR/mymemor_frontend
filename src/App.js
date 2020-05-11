@@ -17,61 +17,52 @@ import ProfilePage from './component/ProfilePage/ProfilePage';
 import React from 'react';
 import RegisterPage from './component/RegisterPage';
 import SearchPage from './component/SearchPage';
+import SessionLogin from './component/SessionLogin/SessionLogin';
 import { connect } from 'react-redux';
 import { isLoading } from './selectors';
 import { setLoading } from './actions';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.sessionLogin = this.sessionLogin.bind(this);
-  }
-  componentDidMount() {
-    this.sessionLogin();
-  }
-  render() {
-    return (
-      < div id="App" >
-        < LoadingOverlay active={this.props.isLoading} spinner text="Loading..." >
-          <Router>
-            <Route render={({ location }) => (
-              <div id="app-container">
-                <header>
-                  <NavBar></NavBar>
-                </header>
-                <section id='main-container'>
-                  <TransitionGroup id="router-transition-group">
-                    <CSSTransition
-                      key={location.key}
-                      classNames="fade"
-                      timeout={300}
-                    >
-                      <Switch location={location}>
-                        <Route path="/" exact component={LandingPage}></Route>
-                        <Route path="/login" component={LoginPage}></Route>
-                        <Route path="/register" component={RegisterPage}></Route>
-                        <Route path="/memoline" component={MemolinePage}></Route>
-                        <Route path="/profile/:profileUsername" component={ProfilePage}></Route>
-                        <Route path="/about" component={AboutPage}></Route>
-                        <Route path="/add-memory" component={AddMemoryPage}></Route>
-                        <Route path="/my-people" component={MyPeoplePage}></Route>
-                        <Route path="/bond-requests" component={BondRequestsPage}></Route>
-                        <Route path="/search/:query" component={SearchPage}></Route>
-                        <Route path="" component={PageNotFound}></Route>
-                      </Switch>
-                    </CSSTransition>
-                  </TransitionGroup>
-                </section>
-              </div>
-            )} />
-          </Router>
-        </LoadingOverlay >
-      </div >
-    );
-  }
-  sessionLogin() {
-    // TODO
-  }
+function App(props) {
+  return (
+    < div id="App" >
+      < LoadingOverlay active={props.isLoading} spinner text="Loading..." >
+        <Router>
+          <Route render={({ location }) => (
+            <div id="app-container">
+              <header>
+                <NavBar></NavBar>
+              </header>
+              <section id='main-container'>
+                {/* component for session login */}
+                <SessionLogin />
+                <TransitionGroup id="router-transition-group">
+                  <CSSTransition
+                    key={location.key}
+                    classNames="fade"
+                    timeout={300}
+                  >
+                    <Switch location={location}>
+                      <Route path="/" exact component={LandingPage}></Route>
+                      <Route path="/login" component={LoginPage}></Route>
+                      <Route path="/register" component={RegisterPage}></Route>
+                      <Route path="/memoline" component={MemolinePage}></Route>
+                      <Route path="/profile/:profileUsername" component={ProfilePage}></Route>
+                      <Route path="/about" component={AboutPage}></Route>
+                      <Route path="/add-memory" component={AddMemoryPage}></Route>
+                      <Route path="/my-people" component={MyPeoplePage}></Route>
+                      <Route path="/bond-requests" component={BondRequestsPage}></Route>
+                      <Route path="/search/:query" component={SearchPage}></Route>
+                      <Route path="" component={PageNotFound}></Route>
+                    </Switch>
+                  </CSSTransition>
+                </TransitionGroup>
+              </section>
+            </div>
+          )} />
+        </Router>
+      </LoadingOverlay >
+    </div >
+  );
 }
 
 const mapStateToProps = state => {

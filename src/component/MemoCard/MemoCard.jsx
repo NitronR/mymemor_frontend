@@ -1,6 +1,8 @@
-import React from "react";
-import { Card, Carousel } from "react-bootstrap";
 import "./MemoCard.css";
+
+import { Card, Carousel } from "react-bootstrap";
+
+import React from "react";
 
 export default class MemoCard extends React.Component {
   render() {
@@ -17,7 +19,7 @@ export default class MemoCard extends React.Component {
             {/* Photo carousel */}
             {this.props.photos.length > 0 && (
               <Carousel style={{ margin: "-1rem", marginTop: "1rem" }}>
-                {this.props.photos.map(photo => (
+                {this.props.photos.map((photo) => (
                   <Carousel.Item>
                     <div
                       className="memocard-photo"

@@ -1,6 +1,6 @@
 import "./Memoline.css";
 
-import { Button, Card, Form } from "react-bootstrap";
+import { Button, Card, ListGroup } from "react-bootstrap";
 
 import ApiService from "../../service/ApiService";
 import { Link } from "react-router-dom";
@@ -19,7 +19,8 @@ class MemolinePage extends React.Component {
     this.state = {
       memories: [],
       no_memories: false,
-      sortBy: 'create_time'
+      sortBy: "create_time",
+      order: "descending",
     };
 
     this.fetchMemoline = this.fetchMemoline.bind(this);
@@ -34,7 +35,10 @@ class MemolinePage extends React.Component {
     this.props.setLoading(true);
 
     try {
-      let response = await ApiService.getMemoline(this.state.sortBy);
+      let response = await ApiService.getMemoline(
+        this.state.sortBy,
+        this.state.order
+      );
 
       // throw if not ok
       if (response.status !== 200) {
@@ -58,8 +62,9 @@ class MemolinePage extends React.Component {
       this.props.setLoading(false);
     }
   };
-  handleSort = event => {
-    // TODO change sort
+  handleSort = (sortBy) => {
+    // update sortby state and fetch memoline
+    this.setState({ sortBy: sortBy }, this.fetchMemoline);
   };
   render() {
     return (
@@ -86,7 +91,7 @@ class MemolinePage extends React.Component {
                     style={{
                       width: "14.8rem",
                       marginTop: "-2rem",
-                      marginBottom: "-1rem"
+                      marginBottom: "-1rem",
                     }}
                   >
                     Add Memory
@@ -98,15 +103,58 @@ class MemolinePage extends React.Component {
             {/* Sort by */}
             <Card style={{ marginTop: "1rem" }}>
               <Card.Body>
-                <Form.Group controlId="sort-by" onChange={this.handleSort}>
-                  <Form.Label>
-                    <h5>Sort by</h5>
-                  </Form.Label>
-                  <Form.Control as="select">
-                    <option value="create_time">Creation time</option>
-                    <option value="memory_time">Memory time</option>
-                  </Form.Control>
-                </Form.Group>
+                <h5 style={{ padding: "0.5rem" }}>Sort by</h5>
+                <ListGroup as="ul">
+                  <ListGroup.Item
+                    as="li"
+                    active={this.state.sortBy === "create_time"}
+                    onClick={() =>
+                      this.setState(
+                        { sortBy: "create_time" },
+                        this.fetchMemoline
+                      )
+                    }
+                    action
+                  >
+                    Creation Time
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                    as="li"
+                    active={this.state.sortBy === "memory_time"}
+                    onClick={() =>
+                      this.setState(
+                        { sortBy: "memory_time" },
+                        this.fetchMemoline
+                      )
+                    }
+                    action
+                  >
+                    Memory Time
+                  </ListGroup.Item>
+                </ListGroup>
+                {/* Order */}
+                <ListGroup as="ul" style={{ marginTop: "1rem" }}>
+                  <ListGroup.Item
+                    as="li"
+                    active={this.state.order === "ascending"}
+                    onClick={() =>
+                      this.setState({ order: "ascending" }, this.fetchMemoline)
+                    }
+                    action
+                  >
+                    Ascending
+                  </ListGroup.Item>
+                  <ListGroup.Item
+                    as="li"
+                    active={this.state.order === "descending"}
+                    onClick={() =>
+                      this.setState({ order: "descending" }, this.fetchMemoline)
+                    }
+                    action
+                  >
+                    Descending
+                  </ListGroup.Item>
+                </ListGroup>{" "}
               </Card.Body>
             </Card>
           </div>
@@ -116,7 +164,7 @@ class MemolinePage extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   let user = getUserState(state);
   return { user };
 };
