@@ -5,7 +5,7 @@ import { toastError, toastSuccess } from "../../utils/Toast";
 import ApiService from "../../service/ApiService";
 import PersonCard from "../ProfilePage/PersonCard/PersonCard";
 import React from "react";
-import RedirectIf from "../RedirectIf/RedirectIf";
+import RedirectIf from "../../component/RedirectIf/RedirectIf";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
 import { setLoading } from "../../actions";

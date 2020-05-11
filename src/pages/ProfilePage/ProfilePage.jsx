@@ -6,7 +6,7 @@ import ApiService from "../../service/ApiService";
 import PersonCard from "./PersonCard";
 import PersonDetails from "./PersonDetails";
 import React from "react";
-import RedirectIf from "../RedirectIf/RedirectIf";
+import RedirectIf from "../../component/RedirectIf";
 import classNames from "classnames";
 import { connect } from "react-redux";
 import { setLoading } from "../../actions";
