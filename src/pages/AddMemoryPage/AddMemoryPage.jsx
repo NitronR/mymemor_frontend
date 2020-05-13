@@ -1,18 +1,20 @@
 import "./AddMemoryPage.css";
 
 import { Alert, Col, Form, Row } from "react-bootstrap";
+import { toastError, toastSuccess } from "../../utils/Toast";
 
 import ApiService from "../../service/ApiService";
 import Card from "react-bootstrap/Card";
 import Input from "../../component/Form/Input";
+import ListInput from "../../component/Form/ListInput";
 import { MAX_LEN_TOPIC } from "../../constants/fieldLimits";
 import React from "react";
 import RedirectIf from "../../component/RedirectIf";
 import SelectPeopleList from "../../component/SelectPeopleList/SelectPeopleList";
+import URLValidator from "../../utils/Validation";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
 import { setLoading } from "../../actions";
-import { toastSuccess } from "../../utils/Toast";
 
 class AddMemoryPage extends React.Component {
   constructor(props) {
@@ -31,6 +33,7 @@ class AddMemoryPage extends React.Component {
       formInvalid: true,
     };
     this.handleInput = this.handleInput.bind(this);
+    this.handlePhotosChange = this.handlePhotosChange.bind(this);
   }
   componentDidMount() {
     // fetch my people
@@ -111,15 +114,11 @@ class AddMemoryPage extends React.Component {
                 required
               />
               {/* Photo Urls */}
-              {/* TODO photo url component with URL validation*/}
-              <Input
-                name="photo_urls"
-                type="List"
-                label="Photo Urls (Line Seperated)"
-                errors={this.state.errors.photo_urls}
-                onChange={this.handleInput}
-                as="textarea"
-                rows="3"
+              <ListInput
+                style={{ marginTop: ".5rem", marginBottom: ".5rem" }}
+                label="Photo URLs"
+                validators={[URLValidator]}
+                onListChange={this.handlePhotosChange}
               />
               <Row>
                 <Col>
@@ -191,9 +190,6 @@ class AddMemoryPage extends React.Component {
       case "content":
         // TODO validation for content
         break;
-      case "photo_urls":
-        // TODO validation for photo_urls
-        break;
       case "start_date":
         // TODO validation
         break;
@@ -220,16 +216,20 @@ class AddMemoryPage extends React.Component {
       };
     });
   }
-
+  // add valid URLs to state
+  handlePhotosChange(photoFields) {
+    let photo_urls = [];
+    photoFields.forEach((photoField) => {
+      if (photoField.errors.length === 0) photo_urls.push(photoField.value);
+    });
+    this.setState({ photo_urls });
+  }
   addMemory = async (event) => {
     event.preventDefault();
 
     if (!this.state.formInvalid) {
       // send to api service and get response
       // TODO handle promise reject
-      // TODO show loadingevent.preventDefault();
-
-      let photos = this.state.form_data.photo_urls.split("\n");
 
       // clear errors
       this.setState({ errors: {} });
@@ -242,7 +242,7 @@ class AddMemoryPage extends React.Component {
       try {
         let response = await ApiService.addMemory({
           ...this.state.form_data,
-          photos,
+          photos: this.state.photo_urls,
         });
 
         // throw if not ok
@@ -270,6 +270,8 @@ class AddMemoryPage extends React.Component {
         // stop loading
         this.props.setLoading(false);
       }
+    } else {
+      toastError("Please check form errors.");
     }
   };
 }
