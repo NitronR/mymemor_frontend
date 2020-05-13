@@ -8,7 +8,7 @@ import { Form } from "react-bootstrap";
 import Input from "../../component/Form/Input";
 import React from "react";
 import RedirectIf from "../../component/RedirectIf";
-import checkUsername from "../../utils/Validation";
+import { checkUsername } from "../../utils/Validation";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
 import { setLoading } from "../../actions";
@@ -27,10 +27,10 @@ class RegisterPage extends React.Component {
         hometown: "",
         current_city: "",
         school: "",
-        college: ""
+        college: "",
       },
       errors: {},
-      formInvalid: true
+      formInvalid: true,
     };
     this.handleInput = this.handleInput.bind(this);
   }
@@ -207,23 +207,23 @@ class RegisterPage extends React.Component {
     }
 
     // if even one error then return form is invalid
-    let formInvalid = Object.keys(errors).some(field => {
+    let formInvalid = Object.keys(errors).some((field) => {
       return errors[field].length !== 0;
     });
 
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return {
         form_data: {
           ...prevState.form_data,
-          [name]: value
+          [name]: value,
         },
         errors: errors,
-        formInvalid: formInvalid
+        formInvalid: formInvalid,
       };
     });
   }
 
-  register = async event => {
+  register = async (event) => {
     event.preventDefault();
 
     if (!this.state.formInvalid) {
@@ -255,11 +255,13 @@ class RegisterPage extends React.Component {
       } finally {
         this.props.setLoading(false);
       }
+    } else {
+      toastError("Please check form errors.");
     }
   };
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   let user = getUserState(state);
   return { user };
 };
