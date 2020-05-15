@@ -23,6 +23,7 @@ class AddMemoryPage extends React.Component {
       form_data: {
         topic: "",
         content: "",
+        location: "",
         photo_urls: "",
         start_date: "",
         end_date: "",
@@ -113,6 +114,14 @@ class AddMemoryPage extends React.Component {
                 rows="3"
                 required
               />
+              {/* Location */}
+              <Input
+                name="location"
+                type="text"
+                label="Location"
+                errors={this.state.errors.location}
+                onChange={this.handleInput}
+              />
               {/* Photo Urls */}
               <ListInput
                 style={{ marginTop: ".5rem", marginBottom: ".5rem" }}
@@ -194,6 +203,9 @@ class AddMemoryPage extends React.Component {
         // TODO validation
         break;
       case "end_date":
+        // TODO validation
+        break;
+      case "location":
         // TODO validation
         break;
       default:

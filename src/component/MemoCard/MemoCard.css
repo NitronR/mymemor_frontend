@@ -2,8 +2,9 @@
   margin-bottom: 1rem;
 }
 .memocard-location {
-  font-weight: bold;
   color: #555;
+  font-size: 1rem;
+  margin-top: 8px;
 }
 .memocard-photo {
   height: 20rem;
