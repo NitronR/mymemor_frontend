@@ -5,6 +5,7 @@ import { Button, Card, ListGroup } from "react-bootstrap";
 import ApiService from "../../service/ApiService";
 import { Link } from "react-router-dom";
 import MemoCard from "../../component/MemoCard";
+import PeopleModal from "../../component/PeopleModal/PeopleModel";
 import React from "react";
 import RedirectIf from "../../component/RedirectIf";
 import { connect } from "react-redux";
@@ -21,6 +22,8 @@ class MemolinePage extends React.Component {
       no_memories: false,
       sortBy: "create_time",
       order: "descending",
+      peopleModalContent: [],
+      showPeopleModal: false,
     };
 
     this.fetchMemoline = this.fetchMemoline.bind(this);
@@ -75,8 +78,18 @@ class MemolinePage extends React.Component {
 
           {/* Memoline */}
           <div id="memoline">
+            {/* Render memories in MemoCard */}
             {this.state.memories.map((memory, idx) => (
-              <MemoCard {...memory} key={idx} />
+              <MemoCard
+                memory={memory}
+                key={idx}
+                onTaggedPeopleClick={(people) =>
+                  this.setState({
+                    peopleModalContent: people,
+                    showPeopleModal: true,
+                  })
+                }
+              />
             ))}
           </div>
 
@@ -159,6 +172,16 @@ class MemolinePage extends React.Component {
             </Card>
           </div>
         </div>
+
+        {/* Modal to show tagged people */}
+        <PeopleModal
+          people={this.state.peopleModalContent}
+          show={this.state.showPeopleModal}
+          onPersonClick={(person) =>
+            this.props.history.push(`/profile/${person.username}`)
+          }
+          onClose={() => this.setState({ showPeopleModal: false })}
+        />
       </div>
     );
   }
