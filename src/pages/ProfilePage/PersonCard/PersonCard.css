@@ -3,6 +3,9 @@
   grid-template-columns: auto 1fr;
   align-items: center;
 }
+.person-card-body.tiny {
+  padding: 0.5rem;
+}
 .person-card-pic {
   border-radius: 50%;
   width: 5rem;
@@ -12,18 +15,28 @@
 .person-card-text {
   padding-left: 2rem;
 }
+.person-card-text.tiny {
+  padding-left: 0.5rem;
+}
 .person-card-pic.small {
   width: 3rem;
   height: 3rem;
   margin: 0.5rem;
 }
-.selected {
-  background-color: #2D91E7 !important;
+.person-card-pic.tiny {
+  width: 2rem;
+  height: 2rem;
+  margin: 0.5rem;
 }
-.selectable {
+.selected {
+  background-color: #2d91e7 !important;
+}
+.selectable,
+.clickable {
   cursor: pointer;
   transition: background-color 0.3s;
 }
-.selectable:hover {
-  background-color: #5CAAED;
+.selectable:hover,
+.clickable:hover {
+  background-color: #5caaed;
 }

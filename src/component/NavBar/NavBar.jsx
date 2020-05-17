@@ -1,26 +1,34 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import { Container, Form, Nav, NavDropdown, Navbar } from "react-bootstrap";
+import { Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
 import { NavLink, withRouter } from "react-router-dom";
 import { logoutUser, setLoading } from "../../actions";
 
 import ApiService from "../../service/ApiService";
-import Input from "../Form/Input/Input";
 import React from "react";
+import SearchBar from "../SearchBar/SearchBar";
 import { connect } from "react-redux";
 import { getUserState } from "../../selectors";
+import { toastInfo } from "../../utils/Toast";
+
+// idle time after which search suggestions are fetched
+const SUGGESTIONS_DEBOUNCE = 2000;
 
 class NavBar extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      search: "",
+      searchQuery: "",
+      searchSuggestions: [],
     };
 
+    this.fetchSuggestions = this.fetchSuggestions.bind(this);
+
     this.handleSearch = this.handleSearch.bind(this);
-    this.handleInput = this.handleInput.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleSuggestionClick = this.handleSuggestionClick.bind(this);
   }
 
   render() {
@@ -51,16 +59,13 @@ class NavBar extends React.Component {
             )}
             {this.props.user.authenticated && (
               <Nav className="ml-auto">
-                {/* Search input*/}
-                <Form inline onSubmit={this.handleSearch}>
-                  <Input
-                    name="search"
-                    type="text"
-                    placeholder="Search"
-                    className="mr-sm-2"
-                    onChange={this.handleInput}
-                  />
-                </Form>
+                {/* Search Bar*/}
+                <SearchBar
+                  onChange={this.handleSearchChange}
+                  onSearch={this.handleSearch}
+                  onSuggestionClick={this.handleSuggestionClick}
+                  suggestions={this.state.searchSuggestions}
+                />
 
                 {/* memoline nav */}
                 <Nav.Link as={NavLink} to="/memoline">
@@ -101,15 +106,67 @@ class NavBar extends React.Component {
       </Navbar>
     );
   }
-  handleInput(event) {
-    let name = event.target.name,
-      value = event.target.value;
+  fetchSuggestions = async function () {
+    try {
+      let response = await ApiService.getSearchSuggestions(
+        this.state.searchQuery
+      );
 
-    this.setState({ [name]: value });
+      // throw if not ok
+      if (response.status !== 200) {
+        throw new Error(response.statusText);
+      }
+
+      response = response.data;
+
+      if (response.status === "success") {
+        // filter current user from suggestions
+        response.searchResults = response.searchResults.filter(
+          (searchResult) => searchResult.username !== this.props.user.username
+        );
+
+        this.setState({ searchSuggestions: response.searchResults });
+      } else {
+        // TODO show error
+      }
+    } catch (e) {
+      // TODO handle promise reject
+    }
+  };
+  handleSearchChange(searchQuery) {
+    searchQuery = searchQuery.trim();
+
+    // update search query in state and clear suggestions
+    this.setState({ searchQuery, searchSuggestions: [] });
+
+    // clear previous suggestions debounce
+    if (this.suggestionsDebounce) {
+      clearTimeout(this.suggestionsDebounce);
+    }
+    if (searchQuery.trim() !== "") {
+      // set debounce only if query not empty
+      this.suggestionsDebounce = setTimeout(
+        this.fetchSuggestions,
+        SUGGESTIONS_DEBOUNCE
+      );
+    }
   }
-  handleSearch(event) {
-    event.preventDefault();
-    this.props.history.push("/search/" + this.state.search);
+  handleSearch() {
+    // if search bar empty, do not search
+    if (this.state.searchQuery === "") {
+      toastInfo("Please enter a search query.");
+      return;
+    }
+
+    // clear suggestions
+    this.setState({ searchSuggestions: [] });
+
+    // show search page
+    this.props.history.push("/search/" + this.state.searchQuery);
+  }
+  handleSuggestionClick(suggestion) {
+    // show profile of suggested person
+    this.props.history.push("/profile/" + suggestion.username);
   }
   async handleLogout() {
     this.props.setLoading(true);

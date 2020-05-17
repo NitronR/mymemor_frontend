@@ -15,7 +15,8 @@ function PeopleModal(props) {
             person={person}
             size="small"
             onClick={() => props.onPersonClick(person)}
-            style={{ marginTop: "0.5rem", cursor: "pointer" }}
+            style={{ marginTop: "0.5rem" }}
+            clickable
           />
         ))}
       </Modal.Body>

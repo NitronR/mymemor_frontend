@@ -1,0 +1,12 @@
+.search-bar-container {
+  position: relative;
+}
+.search-suggestions-dropdown {
+  position: absolute;
+  width: 100%;
+  top: 3rem;
+}
+.search-suggestions-dropdown * {
+  z-index: 20;
+  position: relative;
+}
