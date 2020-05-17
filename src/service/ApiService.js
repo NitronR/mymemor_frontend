@@ -42,6 +42,9 @@ class ApiService {
     search(query, page) {
         return axios.get(`${API_BASE_URL}/search/${query}/${page}`);
     }
+    getSearchSuggestions(query) {
+        return axios.get(`${API_BASE_URL}/suggestions/${query}`, { withCredentials: true });
+    }
 }
 
 export default new ApiService();

@@ -16,6 +16,7 @@ function PersonCard(props) {
       className={
         "person-card" +
         (props.selectable ? " selectable" : "") +
+        (props.clickable ? " clickable" : "") +
         (props.selected ? " selected" : "")
       }
       onClick={() => {
@@ -24,7 +25,7 @@ function PersonCard(props) {
       }}
       {...props}
     >
-      <Card.Body className="person-card-body">
+      <Card.Body className={`person-card-body ${props.size}`}>
         <div className="person-card-content">
           {/* Person image */}
           <div>
@@ -36,14 +37,20 @@ function PersonCard(props) {
           </div>
           {/* Person name, username */}
           {props.size === "" && (
-            <span className="person-card-text">
+            <span className="person-card-text tiny">
               <h4 className="person-card-name">{props.person.name}</h4>
               <h5 className="person-card-username">@{props.person.username}</h5>
             </span>
           )}
           {props.size === "small" && (
-            <span className="person-card-text">
+            <span className="person-card-text tiny">
               <h5 className="person-card-name">{props.person.name}</h5>
+              <h6 className="person-card-username">@{props.person.username}</h6>
+            </span>
+          )}
+          {props.size === "tiny" && (
+            <span className="person-card-text tiny">
+              <h6 className="person-card-name">{props.person.name}</h6>
               <h6 className="person-card-username">@{props.person.username}</h6>
             </span>
           )}
