@@ -1,8 +1,9 @@
 import "./Memoline.css";
 
-import { Button, Card, ListGroup } from "react-bootstrap";
+import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 
 import ApiService from "../../service/ApiService";
+import { ChevronDown } from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
 import MemoCard from "../../component/MemoCard";
 import PeopleModal from "../../component/PeopleModal/PeopleModel";
@@ -24,10 +25,113 @@ class MemolinePage extends React.Component {
       order: "descending",
       peopleModalContent: [],
       showPeopleModal: false,
+      showOptions: false,
     };
 
     this.fetchMemoline = this.fetchMemoline.bind(this);
     this.handleSort = this.handleSort.bind(this);
+  }
+  render() {
+    // display options -> sort by and sort order
+    let displayOptions = (
+      <DisplayOptions
+        sortBy={this.state.sortBy}
+        order={this.state.order}
+        onSortChange={(sortBy) => this.setState({ sortBy }, this.fetchMemoline)}
+        onOrderChange={(order) => this.setState({ order }, this.fetchMemoline)}
+      />
+    );
+    return (
+      <div id="memoline-boundary">
+        {/* Redirect to login if not logged in */}
+        <RedirectIf condition={!this.props.user.authenticated} to="/login" />
+
+        {/* if no memories then show add memory card in center */}
+        {this.state.memories.length === 0 && (
+          <div
+            style={{
+              display: "grid",
+              justifyContent: "center",
+              alignContent: "center",
+              minHeight: "80%",
+            }}
+          >
+            <AddMemoryCard style={{ width: "15rem" }} />
+          </div>
+        )}
+        {/* if have memories then render in memocard */}
+        {this.state.memories.length !== 0 && (
+          <div id="memoline-container">
+            {/* Options bar for mobile */}
+            <Card id="memoline-options-bar">
+              <Card.Body>
+                <Row>
+                  <Col>
+                    <AddMemoryButton style={{ width: "100%" }} />
+                  </Col>
+                  <Col
+                    style={{
+                      justifyContent: "right",
+                      display: "grid",
+                      alignContent: "center",
+                    }}
+                  >
+                    <ChevronDown
+                      size={20}
+                      onClick={() =>
+                        this.setState({ showOptions: !this.state.showOptions })
+                      }
+                    />
+                  </Col>
+                </Row>
+
+                {/* Collapsible options */}
+                {this.state.showOptions && (
+                  <div style={{ marginTop: "0.5rem" }}>{displayOptions}</div>
+                )}
+              </Card.Body>
+            </Card>
+
+            {/* Memoline */}
+            <div id="memoline">
+              {/* Render memories in MemoCard */}
+              {this.state.memories.map((memory, idx) => (
+                <MemoCard
+                  memory={memory}
+                  key={idx}
+                  onTaggedPeopleClick={(people) =>
+                    this.setState({
+                      peopleModalContent: people,
+                      showPeopleModal: true,
+                    })
+                  }
+                />
+              ))}
+            </div>
+
+            {/* Options */}
+            <div id="memoline-options">
+              {/* Add memory */}
+              <AddMemoryCard />
+
+              {/* Display options */}
+              <Card style={{ marginTop: "1rem" }}>
+                <Card.Body>{displayOptions}</Card.Body>
+              </Card>
+            </div>
+          </div>
+        )}
+        {/* Modal to show tagged people */}
+        <PeopleModal
+          people={this.state.peopleModalContent}
+          show={this.state.showPeopleModal}
+          onPersonClick={(person) =>
+            this.props.history.push(`/profile/${person.username}`)
+          }
+          onClose={() => this.setState({ showPeopleModal: false })}
+        />
+      </div>
+    );
   }
   componentDidMount = async () => {
     // fetch memoline
@@ -69,122 +173,78 @@ class MemolinePage extends React.Component {
     // update sortby state and fetch memoline
     this.setState({ sortBy: sortBy }, this.fetchMemoline);
   };
-  render() {
-    return (
-      <div id="memoline-boundary">
-        <div id="memoline-container">
-          {/* Redirect to login if not logged in */}
-          <RedirectIf condition={!this.props.user.authenticated} to="/login" />
+}
 
-          {/* Memoline */}
-          <div id="memoline">
-            {/* Render memories in MemoCard */}
-            {this.state.memories.map((memory, idx) => (
-              <MemoCard
-                memory={memory}
-                key={idx}
-                onTaggedPeopleClick={(people) =>
-                  this.setState({
-                    peopleModalContent: people,
-                    showPeopleModal: true,
-                  })
-                }
-              />
-            ))}
-          </div>
-
-          {/* Options */}
-          {/* Add memory */}
-          <div id="memoline-options">
-            <Card>
-              <Card.Body style={{ padding: 0 }}>
-                <h5 style={{ padding: "2rem" }}>Any memory you want to add?</h5>
-                <Link to="/add-memory">
-                  <Button
-                    style={{
-                      width: "14.8rem",
-                      marginTop: "-2rem",
-                      marginBottom: "-1rem",
-                    }}
-                  >
-                    Add Memory
-                  </Button>
-                </Link>
-              </Card.Body>
-            </Card>
-
-            {/* Sort by */}
-            <Card style={{ marginTop: "1rem" }}>
-              <Card.Body>
-                <h5 style={{ padding: "0.5rem" }}>Sort by</h5>
-                <ListGroup as="ul">
-                  <ListGroup.Item
-                    as="li"
-                    active={this.state.sortBy === "create_time"}
-                    onClick={() =>
-                      this.setState(
-                        { sortBy: "create_time" },
-                        this.fetchMemoline
-                      )
-                    }
-                    action
-                  >
-                    Creation Time
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    as="li"
-                    active={this.state.sortBy === "memory_time"}
-                    onClick={() =>
-                      this.setState(
-                        { sortBy: "memory_time" },
-                        this.fetchMemoline
-                      )
-                    }
-                    action
-                  >
-                    Memory Time
-                  </ListGroup.Item>
-                </ListGroup>
-                {/* Order */}
-                <ListGroup as="ul" style={{ marginTop: "1rem" }}>
-                  <ListGroup.Item
-                    as="li"
-                    active={this.state.order === "ascending"}
-                    onClick={() =>
-                      this.setState({ order: "ascending" }, this.fetchMemoline)
-                    }
-                    action
-                  >
-                    Ascending
-                  </ListGroup.Item>
-                  <ListGroup.Item
-                    as="li"
-                    active={this.state.order === "descending"}
-                    onClick={() =>
-                      this.setState({ order: "descending" }, this.fetchMemoline)
-                    }
-                    action
-                  >
-                    Descending
-                  </ListGroup.Item>
-                </ListGroup>{" "}
-              </Card.Body>
-            </Card>
-          </div>
-        </div>
-
-        {/* Modal to show tagged people */}
-        <PeopleModal
-          people={this.state.peopleModalContent}
-          show={this.state.showPeopleModal}
-          onPersonClick={(person) =>
-            this.props.history.push(`/profile/${person.username}`)
-          }
-          onClose={() => this.setState({ showPeopleModal: false })}
+// card with add memory button
+function AddMemoryCard(props) {
+  return (
+    <Card style={props.style}>
+      <Card.Body style={{ padding: 0 }}>
+        <h5 style={{ padding: "2rem" }}>Any memory you want to add?</h5>
+        <AddMemoryButton
+          style={{
+            width: "100%",
+            marginTop: "-2rem",
+            marginBottom: "-1rem",
+          }}
         />
-      </div>
-    );
-  }
+      </Card.Body>
+    </Card>
+  );
+}
+
+function AddMemoryButton(props) {
+  return (
+    <Link to="/add-memory">
+      <Button style={props.style}>Add Memory</Button>
+    </Link>
+  );
+}
+
+  // display options -> sort by and sort order
+function DisplayOptions(props) {
+  return (
+    <div>
+      <h6 style={{ padding: "0.5rem" }}>Sort by</h6>
+      <ListGroup as="ul">
+        <ListGroup.Item
+          as="li"
+          active={props.sortBy === "create_time"}
+          onClick={() => props.onSortChange("create_time")}
+          action
+        >
+          Creation Time
+        </ListGroup.Item>
+        <ListGroup.Item
+          as="li"
+          active={props.sortBy === "memory_time"}
+          onClick={() => props.onSortChange("memory_time")}
+          action
+        >
+          Memory Time
+        </ListGroup.Item>
+      </ListGroup>
+      {/* Order */}
+      <ListGroup as="ul" style={{ marginTop: "1rem" }}>
+        <ListGroup.Item
+          as="li"
+          active={props.order === "ascending"}
+          onClick={() => props.onOrderChange("ascending")}
+          action
+        >
+          Ascending
+        </ListGroup.Item>
+        <ListGroup.Item
+          as="li"
+          active={props.order === "descending"}
+          onClick={() => props.onOrderChange("descending")}
+          action
+        >
+          Descending
+        </ListGroup.Item>
+      </ListGroup>{" "}
+    </div>
+  );
 }
 
 const mapStateToProps = (state) => {
