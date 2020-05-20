@@ -1,6 +1,7 @@
 import "./SearchPage.css";
 
 import ApiService from "../../service/ApiService";
+import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import PersonCard from "../ProfilePage/PersonCard/PersonCard";
 import React from "react";
@@ -17,7 +18,7 @@ class SearchPage extends React.Component {
     this.state = {
       searchResults: [],
       query: this.props.match.params.query,
-      pageNumber: 1
+      pageNumber: 1,
     };
 
     this.fetchSearchResults = this.fetchSearchResults.bind(this);
@@ -64,13 +65,18 @@ class SearchPage extends React.Component {
         <RedirectIf condition={!this.props.user.authenticated} to="/login" />
 
         <div id="search-container" style={{ marginTop: "1rem" }}>
-          <h3>Search results for</h3>
-          <h4>{this.state.query}</h4>
+          {/* Search query text */}
+          <Card>
+            <Card.Body>
+              <h4>Search results for:</h4>
+              <h5>{this.state.query}</h5>
+            </Card.Body>
+          </Card>
 
           {/* Search results */}
           <div id="search-results">
             {/* TODO show no search results */}
-            {this.state.searchResults.map(searchResult => {
+            {this.state.searchResults.map((searchResult) => {
               if (searchResult.username === this.props.user.username) {
                 return null;
               }
@@ -79,9 +85,7 @@ class SearchPage extends React.Component {
                   to={"/profile/" + searchResult.username}
                   style={{ padding: "0.1rem", textDecoration: "none" }}
                 >
-                  <PersonCard
-                    person={searchResult}
-                  />
+                  <PersonCard person={searchResult} />
                 </Link>
               );
             })}
@@ -93,7 +97,7 @@ class SearchPage extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   let user = getUserState(state);
   return { user };
 };
