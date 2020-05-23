@@ -2,6 +2,7 @@ import "./MyPeoplePage.css";
 
 import ApiService from "../../service/ApiService";
 import { Link } from "react-router-dom";
+import { MessageCard } from "../../component/MessageCard";
 import PersonCard from "../ProfilePage/PersonCard";
 import React from "react";
 import RedirectIf from "../../component/RedirectIf";
@@ -58,22 +59,36 @@ class MyPeoplePage extends React.Component {
         {/* Redirect to login if not logged in */}
         <RedirectIf condition={!this.props.user.authenticated} to="/login" />
 
-        <div id="my-people-container" style={{ marginTop: "1rem" }}>
-          <h3>My People</h3>
+        {/* If empty show empty message */}
+        {this.state.myPeople.length === 0 ? (
+          <MessageCard spaced>
+            <h4>You have not added anybody.</h4>
+          </MessageCard>
+        ) : (
+          <div className="main-section" style={{ marginTop: "1rem" }}>
+            <h3>My People</h3>
 
-          {/* MyPeople list */}
-          <div id="my-people-list">
-            {/* TODO show no MyPeople */}
-            {this.state.myPeople.map((person) => (
-              <Link
-                to={"/profile/" + person.username}
-                style={{ padding: "0.1rem", textDecoration: "none" }}
-              >
-                <PersonCard person={person} />
-              </Link>
-            ))}
+            {/* MyPeople list */}
+            <div style={{ marginTop: "1.5rem" }}>
+              {/* TODO show no MyPeople */}
+              {this.state.myPeople.map((person) => (
+                <Link
+                  to={"/profile/" + person.username}
+                  style={{
+                    textDecoration: "none",
+                    lineHeight: 0,
+                    fontSize: 0,
+                  }}
+                >
+                  <PersonCard
+                    person={person}
+                    style={{ marginBottom: "0.7rem" }}
+                  />
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }

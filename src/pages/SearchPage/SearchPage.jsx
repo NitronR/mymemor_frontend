@@ -3,6 +3,7 @@ import "./SearchPage.css";
 import ApiService from "../../service/ApiService";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { MessageCard } from "../../component/MessageCard/MessageCard";
 import PersonCard from "../ProfilePage/PersonCard/PersonCard";
 import React from "react";
 import RedirectIf from "../../component/RedirectIf";
@@ -64,7 +65,7 @@ class SearchPage extends React.Component {
         {/* Redirect to login if not logged in */}
         <RedirectIf condition={!this.props.user.authenticated} to="/login" />
 
-        <div id="search-container" style={{ marginTop: "1rem" }}>
+        <div className="main-section" style={{ margin: "1rem" }}>
           {/* Search query text */}
           <Card>
             <Card.Body>
@@ -73,23 +74,32 @@ class SearchPage extends React.Component {
             </Card.Body>
           </Card>
 
-          {/* Search results */}
-          <div id="search-results">
-            {/* TODO show no search results */}
-            {this.state.searchResults.map((searchResult) => {
-              if (searchResult.username === this.props.user.username) {
-                return null;
-              }
-              return (
-                <Link
-                  to={"/profile/" + searchResult.username}
-                  style={{ padding: "0.1rem", textDecoration: "none" }}
-                >
-                  <PersonCard person={searchResult} />
-                </Link>
-              );
-            })}
-          </div>
+          {/* If no search results show message */}
+          {this.state.searchResults.length === 0 ? (
+            <MessageCard spaced>
+              <h5>No matches found.</h5>
+            </MessageCard>
+          ) : (
+            <div id="search-results">
+              {/* Search results */}
+              {this.state.searchResults.map((searchResult) => {
+                if (searchResult.username === this.props.user.username) {
+                  return null;
+                }
+                return (
+                  <Link
+                    to={"/profile/" + searchResult.username}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <PersonCard
+                      person={searchResult}
+                      style={{ marginTop: "0.7rem" }}
+                    />
+                  </Link>
+                );
+              })}
+            </div>
+          )}
           {/* TODO add pagination */}
         </div>
       </div>
