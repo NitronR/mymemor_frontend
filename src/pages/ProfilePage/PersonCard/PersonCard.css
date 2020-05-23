@@ -40,3 +40,25 @@
 .clickable:hover {
   background-color: #5caaed;
 }
+@media (max-width: 600px) {
+  .person-card-pic {
+    width: 3rem;
+    height: 3rem;
+    margin: 0.3rem;
+  }
+  .person-card-body {
+    padding: 0.5rem;
+  }
+  h4 {
+    font-size: large !important;
+  }
+  h5 {
+    font-size: medium !important;
+  }
+  h6 {
+    font-size: medium !important;
+  }
+  .person-card-text {
+    padding-left: 0.5rem;
+  }
+}

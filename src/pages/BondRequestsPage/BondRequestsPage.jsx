@@ -3,7 +3,8 @@ import "./BondRequestsPage.css";
 import { toastError, toastSuccess } from "../../utils/Toast";
 
 import ApiService from "../../service/ApiService";
-import PersonCard from "../ProfilePage/PersonCard/PersonCard";
+import { MessageCard } from "../../component/MessageCard";
+import PersonCard from "../ProfilePage/PersonCard";
 import React from "react";
 import RedirectIf from "../../component/RedirectIf/RedirectIf";
 import { connect } from "react-redux";
@@ -15,7 +16,7 @@ class BondRequestsPage extends React.Component {
     super(props);
 
     this.state = {
-      bondRequests: []
+      bondRequests: [],
     };
 
     this.handleReply = this.handleReply.bind(this);
@@ -47,7 +48,7 @@ class BondRequestsPage extends React.Component {
         toastError("Something went wrong");
       }
     } catch (e) {
-        toastError(e.toString());
+      toastError(e.toString());
     } finally {
       // stop loading
       this.props.setLoading(false);
@@ -59,24 +60,33 @@ class BondRequestsPage extends React.Component {
         {/* Redirect to login if not logged in */}
         <RedirectIf condition={!this.props.user.authenticated} to="/login" />
 
-        <div id="bond-requests-container" style={{ marginTop: "1rem" }}>
-          <h3>Bond requests</h3>
+        {/* Bond requests list */}
+        {/* If empty show empty message */}
+        {this.state.bondRequests.length === 0 ? (
+          <MessageCard spaced>
+            <h4>No bond requests.</h4>
+          </MessageCard>
+        ) : (
+          <div style={{ marginTop: "1rem" }} className="main-section">
+            <h3>Bond requests</h3>
 
-          {/* Bond requests list */}
-          <div id="bond-requests-list">
-            {/* TODO show no bond requests */}
-            {this.state.bondRequests.map(bondRequest => (
-              <div style={{ padding: "0.3rem" }}>
-                <PersonCard
-                  person={bondRequest.sender}
-                  onAccept={() => this.handleReply(bondRequest.id, "accept")}
-                  onDecline={() => this.handleReply(bondRequest.id, "decline")}
-                  bondCard
-                />
-              </div>
-            ))}
+            <div style={{ width: "100%" }}>
+              {/* else render list */}
+              {this.state.bondRequests.map((bondRequest) => (
+                <div style={{ padding: "0.3rem" }}>
+                  <PersonCard
+                    person={bondRequest.sender}
+                    onAccept={() => this.handleReply(bondRequest.id, "accept")}
+                    onDecline={() =>
+                      this.handleReply(bondRequest.id, "decline")
+                    }
+                    bondCard
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }
@@ -87,7 +97,7 @@ class BondRequestsPage extends React.Component {
     try {
       let response = await ApiService.bondRequestAction({
         bond_request_id: bondRequestId,
-        action
+        action,
       });
       // throw if not ok
       if (response.status !== 200) {
@@ -107,8 +117,8 @@ class BondRequestsPage extends React.Component {
         // remove bond request of given id
         this.setState({
           bondRequests: this.state.bondRequests.filter(
-            bondRequest => bondRequest.id !== bondRequestId
-          )
+            (bondRequest) => bondRequest.id !== bondRequestId
+          ),
         });
       } else {
         // TODO show error
@@ -121,6 +131,6 @@ class BondRequestsPage extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({ user: getUserState(state) });
+const mapStateToProps = (state) => ({ user: getUserState(state) });
 
 export default connect(mapStateToProps, { setLoading })(BondRequestsPage);

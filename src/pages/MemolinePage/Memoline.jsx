@@ -61,7 +61,10 @@ class MemolinePage extends React.Component {
         )}
         {/* if have memories then render in memocard */}
         {this.state.memories.length !== 0 && (
-          <div id="memoline-container">
+          <div
+            id="memoline-container"
+            className="main-section main-section-large"
+          >
             {/* Options bar for mobile */}
             <Card id="memoline-options-bar">
               <Card.Body>
@@ -201,7 +204,7 @@ function AddMemoryButton(props) {
   );
 }
 
-  // display options -> sort by and sort order
+// display options -> sort by and sort order
 function DisplayOptions(props) {
   return (
     <div>

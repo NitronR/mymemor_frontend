@@ -54,3 +54,17 @@
   opacity: 1;
   transition: opacity 250ms ease-in;
 }
+.main-section {
+  width: 40rem;
+  margin: auto;
+}
+.main-section-large {
+  width: 50rem;
+}
+/* for mobile devices */
+@media (max-width: 600px) {
+  .main-section {
+    width: 100% !important;
+    margin: initial;
+  }
+}

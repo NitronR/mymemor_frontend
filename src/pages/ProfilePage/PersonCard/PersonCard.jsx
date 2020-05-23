@@ -37,13 +37,13 @@ function PersonCard(props) {
           </div>
           {/* Person name, username */}
           {props.size === "" && (
-            <span className="person-card-text tiny">
+            <span className="person-card-text">
               <h4 className="person-card-name">{props.person.name}</h4>
               <h5 className="person-card-username">@{props.person.username}</h5>
             </span>
           )}
           {props.size === "small" && (
-            <span className="person-card-text tiny">
+            <span className="person-card-text small">
               <h5 className="person-card-name">{props.person.name}</h5>
               <h6 className="person-card-username">@{props.person.username}</h6>
             </span>

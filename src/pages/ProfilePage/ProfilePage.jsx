@@ -66,7 +66,7 @@ class ProfilePage extends React.Component {
   }
   render() {
     return (
-      <div className="boundary-center">
+      <div className="main-section" id="profile-container">
         {/* Redirect to login if not logged in */}
         <RedirectIf condition={!this.props.user.authenticated} to="/login" />
 

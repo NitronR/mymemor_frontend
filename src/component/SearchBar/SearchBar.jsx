@@ -35,7 +35,7 @@ class SearchBar extends React.Component {
         <Input
           name="search"
           type="text"
-          placeholder="Search"
+          placeholder="Search people"
           className="mr-sm-2"
           onChange={(event) => this.props.onChange(event.target.value)}
         />

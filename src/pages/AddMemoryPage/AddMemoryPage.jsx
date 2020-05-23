@@ -71,11 +71,11 @@ class AddMemoryPage extends React.Component {
   }
   render() {
     return (
-      <div id="add-memory-boundary">
+      <div id="add-memory-boundary" className="main-section">
         {/* Redirect to login if not logged in */}
         <RedirectIf condition={!this.props.user.authenticated} to="/login" />
 
-        <Card className="main-card" style={{ width: "40rem" }}>
+        <Card className="main-card" style={{ width: "100%" }}>
           <Card.Title>
             {/* Add Memory heading */}
             <h3>Add Memory</h3>
@@ -151,27 +151,32 @@ class AddMemoryPage extends React.Component {
                   />
                 </Col>
               </Row>
-              {/* Select People */}
-              Select people
-              <SelectPeopleList
-                style={{ marginTop: "1rem", marginBottom: "1rem" }}
-                people={this.state.myPeople}
-                peopleIds={this.state.form_data.peopleIds}
-                // update peopleIds list on change
-                onChange={(selectedPeopleIds) =>
-                  this.setState({
-                    form_data: {
-                      ...this.state.form_data,
-                      peopleIds: selectedPeopleIds,
-                    },
-                  })
-                }
-              />
+              {/* Select People, show if myPeople array is not empty */}
+              {this.state.myPeople.length !== 0 && (
+                <div>
+                  Select people
+                  <SelectPeopleList
+                    style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                    people={this.state.myPeople}
+                    peopleIds={this.state.form_data.peopleIds}
+                    // update peopleIds list on change
+                    onChange={(selectedPeopleIds) =>
+                      this.setState({
+                        form_data: {
+                          ...this.state.form_data,
+                          peopleIds: selectedPeopleIds,
+                        },
+                      })
+                    }
+                  />
+                </div>
+              )}
               {/* Add Memory button */}
               <Form.Control
                 type="submit"
                 className="btn-primary"
                 value="Add Memory"
+                style={{ width: "auto", margin: "1rem auto auto auto" }}
               />
             </Form>
           </Card.Body>
