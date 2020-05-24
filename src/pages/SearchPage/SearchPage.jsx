@@ -44,6 +44,12 @@ class SearchPage extends React.Component {
       response = response.data;
 
       if (response.status === "success") {
+        // remove current user from search results if included
+        response.searchResults = response.searchResults.filter(
+          (searchResult) => {
+            return searchResult.username !== this.props.user.username;
+          }
+        );
         // show search results
         this.setState({ searchResults: response.searchResults });
       } else if (response.status === "error") {
@@ -82,22 +88,17 @@ class SearchPage extends React.Component {
           ) : (
             <div id="search-results">
               {/* Search results */}
-              {this.state.searchResults.map((searchResult) => {
-                if (searchResult.username === this.props.user.username) {
-                  return null;
-                }
-                return (
-                  <Link
-                    to={"/profile/" + searchResult.username}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <PersonCard
-                      person={searchResult}
-                      style={{ marginTop: "0.7rem" }}
-                    />
-                  </Link>
-                );
-              })}
+              {this.state.searchResults.map((searchResult) => (
+                <Link
+                  to={"/profile/" + searchResult.username}
+                  style={{ textDecoration: "none" }}
+                >
+                  <PersonCard
+                    person={searchResult}
+                    style={{ marginTop: "0.7rem" }}
+                  />
+                </Link>
+              ))}
             </div>
           )}
           {/* TODO add pagination */}
