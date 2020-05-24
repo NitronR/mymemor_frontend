@@ -29,6 +29,7 @@ class NavBar extends React.Component {
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleSuggestionClick = this.handleSuggestionClick.bind(this);
+    this.clearSuggestions = this.clearSuggestions.bind(this);
   }
 
   render() {
@@ -63,6 +64,7 @@ class NavBar extends React.Component {
                 <SearchBar
                   onChange={this.handleSearchChange}
                   onSearch={this.handleSearch}
+                  onBlur={this.clearSuggestions}
                   onSuggestionClick={this.handleSuggestionClick}
                   suggestions={this.state.searchSuggestions}
                 />
@@ -137,12 +139,10 @@ class NavBar extends React.Component {
     searchQuery = searchQuery.trim();
 
     // update search query in state and clear suggestions
-    this.setState({ searchQuery, searchSuggestions: [] });
+    this.setState({ searchQuery });
 
-    // clear previous suggestions debounce
-    if (this.suggestionsDebounce) {
-      clearTimeout(this.suggestionsDebounce);
-    }
+    this.clearSuggestions();
+
     if (searchQuery.trim() !== "") {
       // set debounce only if query not empty
       this.suggestionsDebounce = setTimeout(
@@ -159,7 +159,7 @@ class NavBar extends React.Component {
     }
 
     // clear suggestions
-    this.setState({ searchSuggestions: [] });
+    this.clearSuggestions();
 
     // show search page
     this.props.history.push("/search/" + this.state.searchQuery);
@@ -192,6 +192,15 @@ class NavBar extends React.Component {
     } finally {
       // stop loading
       this.props.setLoading(false);
+    }
+  }
+  clearSuggestions() {
+    // update search query in state and clear suggestions
+    this.setState({ searchSuggestions: [] });
+
+    // clear suggestions debounce
+    if (this.suggestionsDebounce) {
+      clearTimeout(this.suggestionsDebounce);
     }
   }
 }
